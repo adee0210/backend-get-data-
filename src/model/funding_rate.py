@@ -7,14 +7,13 @@ class FundingRate(BaseModel):
     symbol: str
     rate: float
     timestamp: datetime
-    source: str  # 'history' or 'realtime'
+    source: str  # 'history' hoặc 'realtime'
 
     class Config:
         from_attributes = True
 
 
 class RealtimeFundingRate(BaseModel):
-    _id: str
     symbol: str
     funding_cap: Optional[float] = None
     funding_floor: Optional[float] = None

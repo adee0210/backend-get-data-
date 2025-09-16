@@ -9,8 +9,13 @@ MONGO_CONFIG = {
     "auth": os.getenv("MONGO_AUTH_SOURCE"),
 }
 
-DB_CLEAN = {
-    "database_name": "funding_rate_db",
+DB_FUNDING_RATE = { "database_name": "funding_rate_db",
     "collection_realtime_name": "realtime",
     "collection_history_name": "history",
+}
+
+DB_BTC_DOMINANCE = {
+    "database_name":"btc_dominance",
+    "collection_history_name":"historical_data",
+    "collection_realtime_name":"realtime_data"
 }

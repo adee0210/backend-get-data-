@@ -7,14 +7,9 @@ from src.dto.funding_rate_dto import FundingRateRequest, FundingRateResponse, Re
 
 
 class FundingRateController:
-    """A class-style controller similar to a Spring Boot @RestController.
-
-    Exposes endpoints under `/funding_rate_historical` and delegates to
-    `FundingRateService` for business logic.
-    """
 
     router = APIRouter(
-        prefix="/funding_rate_historical", tags=["funding_rate_historical"]
+        prefix="/crypto/funding_rate_historical", tags=["funding_rate_historical"]  # Thêm '/' ở đầu prefix
     )
 
     @router.get("/{symbols}/{days}", response_model=FundingRateResponse)
@@ -23,40 +18,13 @@ class FundingRateController:
         days: int,
         service: FundingRateService = Depends(get_funding_rate_service),
     ) -> FundingRateResponse:
-        """Get historical funding rates for `symbols` (comma-separated) for the last `days` days.
-
-        Example: `/funding_rate_historical/BTCUSDT,ETHUSDT/7`
-        """
         request = FundingRateRequest(symbols=symbols, days=days)
         response = await service.get_funding_rate_data(request)
         return response
 
-    @router.get("/", response_model=FundingRateResponse)
-    async def get_funding_rate_query(
-        symbols: str | None = None,
-        days: int | None = None,
-        day: int | None = None,  # support alias `day` used in your request
-        service: FundingRateService = Depends(get_funding_rate_service),
-    ) -> FundingRateResponse:
-        """Query endpoint that accepts `?symbols=BTCUSDT&days=10` or `?symbols=BTCUSDT&day=10`.
-
-        This avoids 404s when clients prefer query parameters instead of path params.
-        """
-        if symbols is None:
-            # FastAPI will normally validate required params; return empty response
-            return FundingRateResponse(data=[])
-
-        used_days = days if days is not None else (day if day is not None else 1)
-        request = FundingRateRequest(symbols=symbols, days=used_days)
-        response = await service.get_funding_rate_data(request)
-        return response
-
-
 class RealtimeFundingRateController:
-    """Controller for realtime funding rate data."""
-
     router = APIRouter(
-        prefix="/funding_rate_realtime", tags=["funding_rate_realtime"]
+        prefix="/crypto/funding_rate_realtime", tags=["funding_rate_realtime"]  # Thêm '/' ở đầu prefix
     )
 
     @router.get("/{symbols}", response_model=RealtimeFundingRateResponse)
@@ -64,23 +32,6 @@ class RealtimeFundingRateController:
         symbols: str,
         service: FundingRateService = Depends(get_funding_rate_service),
     ) -> RealtimeFundingRateResponse:
-        """Get realtime funding rates for `symbols` (comma-separated).
-
-        Example: `/funding_rate_realtime/BTCUSDT,ETHUSDT`
-        """
-        request = RealtimeFundingRateRequest(symbols=symbols)
-        response = await service.get_realtime_funding_rate_data(request)
-        return response
-
-    @router.get("/", response_model=RealtimeFundingRateResponse)
-    async def get_realtime_funding_rate_query(
-        symbols: str | None = None,
-        service: FundingRateService = Depends(get_funding_rate_service),
-    ) -> RealtimeFundingRateResponse:
-        """Query endpoint for realtime funding rates: `?symbols=BTCUSDT,ETHUSDT`."""
-        if symbols is None:
-            return RealtimeFundingRateResponse(data=[])
-
         request = RealtimeFundingRateRequest(symbols=symbols)
         response = await service.get_realtime_funding_rate_data(request)
         return response

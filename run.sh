@@ -9,11 +9,11 @@ LOG_FILE="main.log"
 
 # Hàm start server
 start_server() {
-    echo "Starting FastAPI server on 192.168.110.164:8010..."
+    echo "Khởi động FastAPI server trên 192.168.110.164:8010..."
 
     # Kiểm tra xem virtual environment có tồn tại không
     if [ -d ".venv" ]; then
-        echo "Activating virtual environment..."
+        echo "Kích hoạt virtual environment..."
         source .venv/bin/activate
     fi
 
@@ -21,7 +21,7 @@ start_server() {
     if [ -f "$PID_FILE" ]; then
         PID=$(cat "$PID_FILE")
         if kill -0 "$PID" 2>/dev/null; then
-            echo "Server is already running with PID: $PID"
+            echo "Server đã đang chạy với PID: $PID"
             return 1
         else
             rm "$PID_FILE"
@@ -33,9 +33,9 @@ start_server() {
     PID=$!
     echo $PID > "$PID_FILE"
 
-    echo "Server started in background. PID: $PID"
+    echo "Server đã khởi động trong background. PID: $PID"
     echo "Logs: $LOG_FILE"
-    echo "API docs: http://0.0.0.0/docs"
+    echo "API docs: http://0.0.0.0:8010/docs"
 }
 
 # Hàm stop server
@@ -43,33 +43,33 @@ stop_server() {
     if [ -f "$PID_FILE" ]; then
         PID=$(cat "$PID_FILE")
         if kill -0 "$PID" 2>/dev/null; then
-            echo "Stopping server with PID: $PID"
+            echo "Dừng server với PID: $PID"
             kill "$PID"
             sleep 2
             if kill -0 "$PID" 2>/dev/null; then
-                echo "Force killing server..."
+                echo "Buộc dừng server..."
                 kill -9 "$PID"
             fi
             rm "$PID_FILE"
-            echo "Server stopped."
+            echo "Server đã dừng."
         else
-            echo "Server is not running."
+            echo "Server không đang chạy."
             rm "$PID_FILE"
         fi
     else
-        echo "No PID file found. Server may not be running."
+        echo "Không tìm thấy file PID. Server có thể không đang chạy."
     fi
 }
 
 # Hàm restart server
 restart_server() {
-    echo "Restarting server..."
+    echo "Khởi động lại server..."
     stop_server
     sleep 2
     start_server
 }
 
-# Main logic
+# Logic chính
 case "${1:-start}" in
     start)
         start_server
@@ -81,8 +81,8 @@ case "${1:-start}" in
         restart_server
         ;;
     *)
-        echo "Usage: $0 [start|stop|restart]"
-        echo "Default: start"
+        echo "Cách sử dụng: $0 [start|stop|restart]"
+        echo "Mặc định: start"
         exit 1
         ;;
 esac
