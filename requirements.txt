@@ -1,0 +1,6 @@
+pymongo
+fastapi
+logging
+schedule
+requests
+pydantic
