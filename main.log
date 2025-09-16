@@ -1,0 +1,123 @@
+nohup: failed to run command 'uvicorn': No such file or directory
+Traceback (most recent call last):
+  File "/home/duc_le/backend-get-data-/.venv/bin/uvicorn", line 7, in <module>
+    sys.exit(main())
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/click/core.py", line 1442, in __call__
+    return self.main(*args, **kwargs)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/click/core.py", line 1363, in main
+    rv = self.invoke(ctx)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/click/core.py", line 1226, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/click/core.py", line 794, in invoke
+    return callback(*args, **kwargs)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/uvicorn/main.py", line 413, in main
+    run(
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/uvicorn/main.py", line 580, in run
+    server.run()
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "/usr/lib/python3.10/asyncio/base_events.py", line 649, in run_until_complete
+    return future.result()
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 71, in serve
+    await self._serve(sockets)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/uvicorn/server.py", line 78, in _serve
+    config.load()
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/uvicorn/config.py", line 436, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/duc_le/backend-get-data-/src/main.py", line 4, in <module>
+    from src.controller.v1.funding_rate import FundingRateController, RealtimeFundingRateController
+  File "/home/duc_le/backend-get-data-/src/controller/v1/funding_rate.py", line 2, in <module>
+    from src.service.funding_rate_service import (
+  File "/home/duc_le/backend-get-data-/src/service/funding_rate_service.py", line 3, in <module>
+    from src.config.mongo_config import MongoDBConfig, get_db_and_collections
+  File "/home/duc_le/backend-get-data-/src/config/mongo_config.py", line 2, in <module>
+    from src.config.variable_config import MONGO_CONFIG, DB_CLEAN
+  File "/home/duc_le/backend-get-data-/src/config/variable_config.py", line 2, in <module>
+    from dotenv import load_dotenv
+ModuleNotFoundError: No module named 'dotenv'
+INFO:     Started server process [1094178]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8010 (Press CTRL+C to quit)
+INFO:     127.0.0.1:44390 - "GET / HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44390 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:44404 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44404 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44412 - "GET /funding_rate_historical/BTCUSDT/10 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1094178]
+INFO:     Started server process [1098198]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8010 (Press CTRL+C to quit)
+INFO:     127.0.0.1:36098 - "GET / HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:36098 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36098 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36100 - "GET /funding_rate_historical/BTCUSDT/10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33058 - "GET /funding_rate_historical/BTCUSDT/10 HTTP/1.1" 200 OK
+INFO:     192.168.110.160:62790 - "GET /funding_rate_historical?symbol=BTCUSDT&days=10 HTTP/1.1" 307 Temporary Redirect
+INFO:     192.168.110.160:62790 - "GET /funding_rate_historical/?symbol=BTCUSDT&days=10 HTTP/1.1" 200 OK
+INFO:     192.168.110.160:62790 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     192.168.110.160:62797 - "GET /funding_rate_historical/?symbol=BTCUSDT&days=10 HTTP/1.1" 200 OK
+INFO:     192.168.110.176:64139 - "GET /funding_rate_historical/?symbol=BTCUSDT&days=10 HTTP/1.1" 200 OK
+INFO:     192.168.110.176:64139 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1098198]
+INFO:     Started server process [1111870]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://192.168.110.164:8010 (Press CTRL+C to quit)
+INFO:     192.168.110.176:64190 - "GET / HTTP/1.1" 404 Not Found
+INFO:     192.168.110.176:64191 - "GET /funding_rate_historical/?symbol=BTCUSDT&days=10 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1111870]
+nohup: failed to run command 'uvicorn': No such file or directory
+INFO:     Started server process [1120781]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://192.168.110.164:8010 (Press CTRL+C to quit)
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1120781]
+INFO:     Started server process [1127287]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8010 (Press CTRL+C to quit)
+INFO:     192.168.110.176:64386 - "GET / HTTP/1.1" 404 Not Found
+INFO:     192.168.110.176:64387 - "GET /docs HTTP/1.1" 200 OK
+INFO:     192.168.110.176:64387 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     192.168.110.176:64395 - "GET /funding_rate_historical/?symbol=BTCUSDT&days=10 HTTP/1.1" 200 OK
+INFO:     192.168.110.176:64399 - "GET /funding_rate_historical/?symbols=BTCUSDT&days=10 HTTP/1.1" 200 OK
+INFO:     192.168.110.160:63804 - "GET /funding_rate_historical/?symbols=BTCUSDT&days=10 HTTP/1.1" 200 OK
+INFO:     192.168.110.160:63814 - "GET /funding_rate_historical/?symbols=BTCUSDT&days=10 HTTP/1.1" 200 OK
+INFO:     192.168.110.160:63849 - "GET /funding_rate_historical/?symbols=BTCUSDT&days=10 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1127287]
+INFO:     Started server process [1133692]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8010 (Press CTRL+C to quit)
+INFO:     192.168.110.176:64431 - "GET /funding_rate_historical/?symbols=BTCUSDT&days=10 HTTP/1.1" 200 OK

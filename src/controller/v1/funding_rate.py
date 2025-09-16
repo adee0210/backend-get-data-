@@ -3,7 +3,7 @@ from src.service.funding_rate_service import (
     FundingRateService,
     get_funding_rate_service,
 )
-from src.dto.funding_rate_dto import FundingRateRequest, FundingRateResponse
+from src.dto.funding_rate_dto import FundingRateRequest, FundingRateResponse, RealtimeFundingRateRequest, RealtimeFundingRateResponse
 
 
 class FundingRateController:
@@ -49,4 +49,38 @@ class FundingRateController:
         used_days = days if days is not None else (day if day is not None else 1)
         request = FundingRateRequest(symbols=symbols, days=used_days)
         response = await service.get_funding_rate_data(request)
+        return response
+
+
+class RealtimeFundingRateController:
+    """Controller for realtime funding rate data."""
+
+    router = APIRouter(
+        prefix="/funding_rate_realtime", tags=["funding_rate_realtime"]
+    )
+
+    @router.get("/{symbols}", response_model=RealtimeFundingRateResponse)
+    async def get_realtime_funding_rate_controller(
+        symbols: str,
+        service: FundingRateService = Depends(get_funding_rate_service),
+    ) -> RealtimeFundingRateResponse:
+        """Get realtime funding rates for `symbols` (comma-separated).
+
+        Example: `/funding_rate_realtime/BTCUSDT,ETHUSDT`
+        """
+        request = RealtimeFundingRateRequest(symbols=symbols)
+        response = await service.get_realtime_funding_rate_data(request)
+        return response
+
+    @router.get("/", response_model=RealtimeFundingRateResponse)
+    async def get_realtime_funding_rate_query(
+        symbols: str | None = None,
+        service: FundingRateService = Depends(get_funding_rate_service),
+    ) -> RealtimeFundingRateResponse:
+        """Query endpoint for realtime funding rates: `?symbols=BTCUSDT,ETHUSDT`."""
+        if symbols is None:
+            return RealtimeFundingRateResponse(data=[])
+
+        request = RealtimeFundingRateRequest(symbols=symbols)
+        response = await service.get_realtime_funding_rate_data(request)
         return response

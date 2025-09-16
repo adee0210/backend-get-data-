@@ -4,3 +4,5 @@ logging
 schedule
 requests
 pydantic
+uvicorn
+python-dotenv

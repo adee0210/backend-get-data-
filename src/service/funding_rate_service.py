@@ -1,7 +1,8 @@
 from typing import List, Dict, Any
 from datetime import datetime, timedelta
 from src.config.mongo_config import MongoDBConfig, get_db_and_collections
-from src.dto.funding_rate_dto import FundingRateRequest, FundingRateResponse
+from src.dto.funding_rate_dto import FundingRateRequest, FundingRateResponse, RealtimeFundingRateRequest, RealtimeFundingRateResponse
+from src.model.funding_rate import RealtimeFundingRate
 from concurrent.futures import ThreadPoolExecutor
 import asyncio
 
@@ -9,7 +10,7 @@ import asyncio
 class FundingRateService:
     def __init__(self, db_client=None):
         self._client = db_client or MongoDBConfig().get_client()
-        self._db_name, _, self._history_col = get_db_and_collections()
+        self._db_name, self._realtime_col, self._history_col = get_db_and_collections()
 
     async def get_funding_rate_data(
         self, request: FundingRateRequest
@@ -38,10 +39,9 @@ class FundingRateService:
             db = self._client[self._db_name]
             coll = db[self._history_col]
 
-            # Use aggregation to get the most recent `days` dates per symbol
-            pipeline = [
+            # First, get the most recent distinct dates
+            date_pipeline = [
                 {"$match": {"symbol": {"$in": symbols}}},
-                # Convert funding_date string to date for sorting if needed
                 {
                     "$addFields": {
                         "_funding_date_obj": {
@@ -53,20 +53,40 @@ class FundingRateService:
                     }
                 },
                 {"$sort": {"_funding_date_obj": -1}},
-                # Group by symbol and funding_date to keep one doc per date (first after sort)
                 {
                     "$group": {
-                        "_id": {"symbol": "$symbol", "funding_date": "$funding_date"},
-                        "doc": {"$first": "$$ROOT"},
+                        "_id": "$funding_date",
+                        "date_obj": {"$first": "$_funding_date_obj"}
                     }
                 },
-                {"$replaceRoot": {"newRoot": "$doc"}},
-                {"$sort": {"_funding_date_obj": -1}},
-                {"$limit": request.days * len(symbols)},
+                {"$sort": {"date_obj": -1}},
+                {"$limit": request.days},
+                {"$project": {"_id": 1}}
+            ]
+
+            recent_dates = [doc["_id"] for doc in coll.aggregate(date_pipeline)]
+
+            # Now get all documents for these dates and symbols
+            main_pipeline = [
+                {"$match": {
+                    "symbol": {"$in": symbols},
+                    "funding_date": {"$in": recent_dates}
+                }},
+                {
+                    "$addFields": {
+                        "_funding_date_obj": {
+                            "$dateFromString": {
+                                "dateString": "$funding_date",
+                                "format": "%Y-%m-%d",
+                            }
+                        }
+                    }
+                },
+                {"$sort": {"_funding_date_obj": -1, "funding_time": -1}},
             ]
 
             # Run aggregation
-            docs = list(coll.aggregate(pipeline))
+            docs = list(coll.aggregate(main_pipeline))
             return docs
 
         docs = await loop.run_in_executor(None, _query)
@@ -87,6 +107,60 @@ class FundingRateService:
             data.append(clean_doc)
 
         return FundingRateResponse(data=data)
+
+    async def get_realtime_funding_rate_data(
+        self, request: RealtimeFundingRateRequest
+    ) -> RealtimeFundingRateResponse:
+        """Fetch realtime funding rate data for the provided symbols.
+
+        Queries the realtime collection for the latest data per symbol.
+        """
+        symbols = [s.strip() for s in request.symbols.split(",") if s.strip()]
+
+        loop = asyncio.get_running_loop()
+
+        def _query():
+            db = self._client[self._db_name]
+            coll = db[self._realtime_col]
+
+            # Get the latest document for each symbol
+            pipeline = [
+                {"$match": {"symbol": {"$in": symbols}}},
+                {"$sort": {"update_date": -1, "update_time": -1}},  # Sort by date and time descending
+                {
+                    "$group": {
+                        "_id": "$symbol",
+                        "doc": {"$first": "$$ROOT"}
+                    }
+                },
+                {"$replaceRoot": {"newRoot": "$doc"}}
+            ]
+
+            docs = list(coll.aggregate(pipeline))
+            return docs
+
+        docs = await loop.run_in_executor(None, _query)
+
+        # Convert to RealtimeFundingRate models
+        data: List[RealtimeFundingRate] = []
+        for doc in docs:
+            realtime_rate = RealtimeFundingRate(
+                _id=str(doc.get("_id")),
+                symbol=doc.get("symbol"),
+                funding_cap=doc.get("funding_cap"),
+                funding_floor=doc.get("funding_floor"),
+                funding_hour=doc.get("funding_hour"),
+                funding_rate=doc.get("funding_rate"),
+                index_price=doc.get("index_price"),
+                interest_rate=doc.get("interest_rate"),
+                interval=doc.get("interval"),
+                mark_price=doc.get("mark_price"),
+                update_date=doc.get("update_date"),
+                update_time=doc.get("update_time")
+            )
+            data.append(realtime_rate)
+
+        return RealtimeFundingRateResponse(data=data)
 
 
 def get_funding_rate_service():
