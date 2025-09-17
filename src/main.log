@@ -1,0 +1,13 @@
+2025-09-18 02:37:39,761 - MainProcess - INFO - main - Starting application...
+2025-09-18 02:37:39,769 - MainProcess - INFO - main - Running initial funding rate check...
+2025-09-18 02:37:39,770 - MainProcess - ERROR - main - Error in monitoring scheduler: This event loop is already running
+2025-09-18 02:37:39,771 - MainProcess - INFO - main - Monitoring scheduler started, checking every 3600 seconds
+2025-09-18 02:37:39,771 - MainProcess - INFO - main - Monitoring system started successfully
+2025-09-18 02:38:10,635 - MainProcess - INFO - main - Starting funding rate data check...
+2025-09-18 02:38:10,653 - MainProcess - ERROR - main - Error checking API: Cannot connect to host localhost:8000 ssl:default [Connect call failed ('127.0.0.1', 8000)]
+2025-09-18 02:38:16,098 - MainProcess - INFO - main - Telegram message sent successfully
+2025-09-18 02:38:16,098 - MainProcess - WARNING - main - Detected 5 symbols missing data: ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'ADAUSDT', 'XRPUSDT']
+2025-09-18 02:38:58,126 - MainProcess - INFO - main - Starting funding rate data check...
+2025-09-18 02:38:58,134 - MainProcess - ERROR - main - Error checking API: Cannot connect to host localhost:8000 ssl:default [Connect call failed ('127.0.0.1', 8000)]
+2025-09-18 02:38:59,476 - MainProcess - INFO - main - Telegram message sent successfully
+2025-09-18 02:38:59,476 - MainProcess - WARNING - main - Detected 5 symbols missing data: ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'ADAUSDT', 'XRPUSDT']

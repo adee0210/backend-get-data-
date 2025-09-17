@@ -6,3 +6,4 @@ requests
 pydantic
 uvicorn
 python-dotenv
+aiohttp

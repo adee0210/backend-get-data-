@@ -43,3 +43,27 @@ INFO:     Uvicorn running on http://0.0.0.0:8010 (Press CTRL+C to quit)
 INFO:     192.168.110.176:49788 - "GET /docs HTTP/1.1" 200 OK
 INFO:     192.168.110.176:49788 - "GET /openapi.json HTTP/1.1" 200 OK
 INFO:     192.168.110.176:49789 - "GET /crypto/btc_dominance_historical/10 HTTP/1.1" 200 OK
+INFO:     Started server process [66930]
+INFO:     Waiting for application startup.
+2025-09-18 02:37:39,761 - MainProcess - INFO - main - Starting application...
+2025-09-18 02:37:39,769 - MainProcess - INFO - main - Running initial funding rate check...
+2025-09-18 02:37:39,770 - MainProcess - ERROR - main - Error in monitoring scheduler: This event loop is already running
+/home/duc/backend-get-data-/src/service/scheduler_service.py:46: RuntimeWarning: coroutine 'FundingRateMonitorService.check_funding_rate_data' was never awaited
+  logger.error(f"Error in monitoring scheduler: {str(e)}")
+RuntimeWarning: Enable tracemalloc to get the object allocation traceback
+2025-09-18 02:37:39,771 - MainProcess - INFO - main - Monitoring scheduler started, checking every 3600 seconds
+2025-09-18 02:37:39,771 - MainProcess - INFO - main - Monitoring system started successfully
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8010 (Press CTRL+C to quit)
+INFO:     127.0.0.1:43446 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43446 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37832 - "POST /monitoring/funding_rate/check-async HTTP/1.1" 200 OK
+2025-09-18 02:38:10,635 - MainProcess - INFO - main - Starting funding rate data check...
+2025-09-18 02:38:10,653 - MainProcess - ERROR - main - Error checking API: Cannot connect to host localhost:8000 ssl:default [Connect call failed ('127.0.0.1', 8000)]
+2025-09-18 02:38:16,098 - MainProcess - INFO - main - Telegram message sent successfully
+2025-09-18 02:38:16,098 - MainProcess - WARNING - main - Detected 5 symbols missing data: ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'ADAUSDT', 'XRPUSDT']
+2025-09-18 02:38:58,126 - MainProcess - INFO - main - Starting funding rate data check...
+2025-09-18 02:38:58,134 - MainProcess - ERROR - main - Error checking API: Cannot connect to host localhost:8000 ssl:default [Connect call failed ('127.0.0.1', 8000)]
+2025-09-18 02:38:59,476 - MainProcess - INFO - main - Telegram message sent successfully
+2025-09-18 02:38:59,476 - MainProcess - WARNING - main - Detected 5 symbols missing data: ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'ADAUSDT', 'XRPUSDT']
+INFO:     127.0.0.1:47208 - "GET /monitoring/funding_rate/check HTTP/1.1" 200 OK

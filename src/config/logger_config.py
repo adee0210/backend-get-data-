@@ -32,3 +32,7 @@ class LoggingConfig:
         logger.propagate = False
 
         return logger
+
+
+# Create default logger instance
+logger = LoggingConfig.logger_config("main")
