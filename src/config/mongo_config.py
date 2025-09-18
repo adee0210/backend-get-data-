@@ -52,11 +52,6 @@ class MongoDBConfig:
 
 
 def get_db_and_collections_funding_rate():
-    """Trả về tên database và tên collection được định nghĩa trong `DB_CLEAN`.
-
-    Helper này phản ánh cấu trúc variable_config để các module khác có thể
-    import tên database/collection từ một nơi duy nhất.
-    """
     return (
         DB_FUNDING_RATE.get("database_name"),
         DB_FUNDING_RATE.get("collection_realtime_name"),
@@ -64,8 +59,6 @@ def get_db_and_collections_funding_rate():
     )
 
 def get_db_and_collections_btcdominance():
-    # Trả về tuple (database_name, realtime_collection, history_collection)
-    # Trước đây dùng set gây mất thứ tự và lỗi khi unpack
     return (
         DB_BTC_DOMINANCE.get("database_name"),
         DB_BTC_DOMINANCE.get("collection_realtime_name"),

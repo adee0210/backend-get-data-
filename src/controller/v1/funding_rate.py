@@ -9,7 +9,7 @@ from src.dto.funding_rate_dto import FundingRateRequest, FundingRateResponse, Re
 class FundingRateController:
 
     router = APIRouter(
-        prefix="/crypto/funding_rate_historical", tags=["funding_rate_historical"]  # Thêm '/' ở đầu prefix
+        prefix="/crypto/funding_rate_historical", tags=["funding_rate_historical"]
     )
 
     @router.get("/{symbols}/{days}", response_model=FundingRateResponse)
@@ -24,7 +24,7 @@ class FundingRateController:
 
 class RealtimeFundingRateController:
     router = APIRouter(
-        prefix="/crypto/funding_rate_realtime", tags=["funding_rate_realtime"]  # Thêm '/' ở đầu prefix
+        prefix="/crypto/funding_rate_realtime", tags=["funding_rate_realtime"]  
     )
 
     @router.get("/{symbols}", response_model=RealtimeFundingRateResponse)

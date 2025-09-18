@@ -67,3 +67,181 @@ INFO:     127.0.0.1:37832 - "POST /monitoring/funding_rate/check-async HTTP/1.1"
 2025-09-18 02:38:59,476 - MainProcess - INFO - main - Telegram message sent successfully
 2025-09-18 02:38:59,476 - MainProcess - WARNING - main - Detected 5 symbols missing data: ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'ADAUSDT', 'XRPUSDT']
 INFO:     127.0.0.1:47208 - "GET /monitoring/funding_rate/check HTTP/1.1" 200 OK
+INFO:     Started server process [524771]
+INFO:     Waiting for application startup.
+2025-09-18 14:08:51,748 - MainProcess - INFO - main - Starting application...
+2025-09-18 14:08:51,748 - MainProcess - INFO - main - Application started successfully
+INFO:     Application startup complete.
+ERROR:    [Errno 98] error while attempting to bind on address ('0.0.0.0', 8010): address already in use
+INFO:     Waiting for application shutdown.
+2025-09-18 14:08:51,748 - MainProcess - INFO - main - Shutting down application...
+2025-09-18 14:08:51,748 - MainProcess - INFO - main - Application stopped successfully
+INFO:     Application shutdown complete.
+INFO:     Started server process [593902]
+INFO:     Waiting for application startup.
+2025-09-18 15:04:02,684 - MainProcess - INFO - main - Starting application...
+2025-09-18 15:04:02,684 - MainProcess - INFO - main - Application started successfully
+INFO:     Application startup complete.
+ERROR:    [Errno 98] error while attempting to bind on address ('0.0.0.0', 8010): address already in use
+INFO:     Waiting for application shutdown.
+2025-09-18 15:04:02,685 - MainProcess - INFO - main - Shutting down application...
+2025-09-18 15:04:02,685 - MainProcess - INFO - main - Application stopped successfully
+INFO:     Application shutdown complete.
+INFO:     Started server process [600391]
+INFO:     Waiting for application startup.
+2025-09-18 15:08:32,697 - MainProcess - INFO - main - Starting application...
+2025-09-18 15:08:32,697 - MainProcess - INFO - main - Application started successfully
+INFO:     Application startup complete.
+ERROR:    [Errno 98] error while attempting to bind on address ('0.0.0.0', 8010): address already in use
+INFO:     Waiting for application shutdown.
+2025-09-18 15:08:32,697 - MainProcess - INFO - main - Shutting down application...
+2025-09-18 15:08:32,697 - MainProcess - INFO - main - Application stopped successfully
+INFO:     Application shutdown complete.
+INFO:     Started server process [600557]
+INFO:     Waiting for application startup.
+2025-09-18 15:08:36,617 - MainProcess - INFO - main - Starting application...
+2025-09-18 15:08:36,617 - MainProcess - INFO - main - Application started successfully
+INFO:     Application startup complete.
+ERROR:    [Errno 98] error while attempting to bind on address ('0.0.0.0', 8010): address already in use
+INFO:     Waiting for application shutdown.
+2025-09-18 15:08:36,618 - MainProcess - INFO - main - Shutting down application...
+2025-09-18 15:08:36,618 - MainProcess - INFO - main - Application stopped successfully
+INFO:     Application shutdown complete.
+INFO:     Started server process [606977]
+INFO:     Waiting for application startup.
+2025-09-18 15:13:35,163 - MainProcess - INFO - main - Starting application...
+2025-09-18 15:13:35,163 - MainProcess - INFO - main - Application started successfully
+INFO:     Application startup complete.
+ERROR:    [Errno 98] error while attempting to bind on address ('0.0.0.0', 8010): address already in use
+INFO:     Waiting for application shutdown.
+2025-09-18 15:13:35,163 - MainProcess - INFO - main - Shutting down application...
+2025-09-18 15:13:35,163 - MainProcess - INFO - main - Application stopped successfully
+INFO:     Application shutdown complete.
+INFO:     Started server process [612405]
+INFO:     Waiting for application startup.
+2025-09-18 15:17:54,378 - MainProcess - INFO - main - Starting application...
+2025-09-18 15:17:54,378 - MainProcess - INFO - main - Application started successfully
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8010 (Press CTRL+C to quit)
+INFO:     127.0.0.1:57298 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57298 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57310 - "GET /crypto/btc_dominance_historical/10 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2025-09-18 15:24:17,145 - MainProcess - INFO - main - Shutting down application...
+2025-09-18 15:24:17,146 - MainProcess - INFO - main - Application stopped successfully
+INFO:     Application shutdown complete.
+INFO:     Finished server process [612405]
+INFO:     Started server process [620918]
+INFO:     Waiting for application startup.
+2025-09-18 15:24:21,389 - MainProcess - INFO - main - Starting application...
+2025-09-18 15:24:21,389 - MainProcess - INFO - main - Application started successfully
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8010 (Press CTRL+C to quit)
+INFO:     127.0.0.1:50364 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50364 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50354 - "GET /crypto/btc_dominance_historical/10 HTTP/1.1" 200 OK
+2025-09-18 15:25:05,271 - MainProcess - INFO - main - Starting funding rate data check...
+2025-09-18 15:25:05,271 - MainProcess - INFO - main - Not in funding rate check window. Next: 2025-09-18 16:00:00
+INFO:     127.0.0.1:50374 - "GET /crypto/monitoring/check HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51030 - "GET /health HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51042 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47266 - "GET /crypto/monitoring/status HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47280 - "GET /crypto/btc_dominance_realtime/ HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39838 - "GET /crypto/btc_dominance_historical/1000 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49768 - "GET /crypto/btc_dominance_historical/10000 HTTP/1.1" 200 OK
+INFO:     Started server process [637299]
+INFO:     Waiting for application startup.
+2025-09-18 15:37:40,577 - MainProcess - INFO - main - Starting application...
+2025-09-18 15:37:40,577 - MainProcess - INFO - main - Application started successfully
+INFO:     Application startup complete.
+ERROR:    [Errno 98] error while attempting to bind on address ('0.0.0.0', 8010): address already in use
+INFO:     Waiting for application shutdown.
+2025-09-18 15:37:40,577 - MainProcess - INFO - main - Shutting down application...
+2025-09-18 15:37:40,577 - MainProcess - INFO - main - Application stopped successfully
+INFO:     Application shutdown complete.
+INFO:     127.0.0.1:37338 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37338 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     Started server process [638108]
+INFO:     Waiting for application startup.
+2025-09-18 15:38:17,866 - MainProcess - INFO - main - Starting application...
+2025-09-18 15:38:17,866 - MainProcess - INFO - main - Application started successfully
+INFO:     Application startup complete.
+ERROR:    [Errno 98] error while attempting to bind on address ('0.0.0.0', 8010): address already in use
+INFO:     Waiting for application shutdown.
+2025-09-18 15:38:17,867 - MainProcess - INFO - main - Shutting down application...
+2025-09-18 15:38:17,867 - MainProcess - INFO - main - Application stopped successfully
+INFO:     Application shutdown complete.
+INFO:     Started server process [638691]
+INFO:     Waiting for application startup.
+2025-09-18 15:38:42,671 - MainProcess - INFO - main - Starting application...
+2025-09-18 15:38:42,671 - MainProcess - INFO - main - Application started successfully
+INFO:     Application startup complete.
+ERROR:    [Errno 98] error while attempting to bind on address ('0.0.0.0', 8010): address already in use
+INFO:     Waiting for application shutdown.
+2025-09-18 15:38:42,671 - MainProcess - INFO - main - Shutting down application...
+2025-09-18 15:38:42,671 - MainProcess - INFO - main - Application stopped successfully
+INFO:     Application shutdown complete.
+INFO:     127.0.0.1:56484 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56484 - "GET /openapi.json HTTP/1.1" 200 OK
+2025-09-18 15:39:00,057 - MainProcess - INFO - main - Starting funding rate data check...
+2025-09-18 15:39:00,057 - MainProcess - INFO - main - Not in funding rate check window. Next: 2025-09-18 16:00:00
+INFO:     127.0.0.1:56490 - "GET /crypto/monitoring/check HTTP/1.1" 200 OK
+INFO:     192.168.110.164:37750 - "GET /crypto/monitoring/funding-rate HTTP/1.1" 404 Not Found
+2025-09-18 15:40:14,022 - MainProcess - INFO - main - Starting funding rate data check...
+2025-09-18 15:40:14,022 - MainProcess - INFO - main - Not in funding rate check window. Next: 2025-09-18 16:00:00
+INFO:     192.168.110.164:37752 - "GET /crypto/monitoring/check HTTP/1.1" 200 OK
+INFO:     Started server process [641052]
+INFO:     Waiting for application startup.
+2025-09-18 15:40:33,736 - MainProcess - INFO - main - Starting application...
+2025-09-18 15:40:33,736 - MainProcess - INFO - main - Application started successfully
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8010 (Press CTRL+C to quit)
+INFO:     127.0.0.1:58200 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58200 - "GET /openapi.json HTTP/1.1" 200 OK
+2025-09-18 15:40:46,934 - MainProcess - INFO - main - Checking funding rate data...
+INFO:     127.0.0.1:58204 - "GET /crypto/monitoring/funding-rate HTTP/1.1" 200 OK
+2025-09-18 15:40:58,447 - MainProcess - INFO - main - Checking BTC dominance realtime data...
+2025-09-18 15:40:58,459 - MainProcess - WARNING - main - BTC DOMINANCE ALERT: Data is 520.97 minutes old (tolerance: 30 minutes)
+INFO:     127.0.0.1:58210 - "GET /crypto/monitoring/btc-dominance HTTP/1.1" 200 OK
+2025-09-18 15:41:00,418 - MainProcess - INFO - main - Checking BTC dominance realtime data...
+2025-09-18 15:41:00,429 - MainProcess - WARNING - main - BTC DOMINANCE ALERT: Data is 521.01 minutes old (tolerance: 30 minutes)
+INFO:     127.0.0.1:58210 - "GET /crypto/monitoring/btc-dominance HTTP/1.1" 200 OK
+2025-09-18 15:41:19,143 - MainProcess - INFO - main - Checking funding rate data...
+INFO:     192.168.110.164:57660 - "GET /crypto/monitoring/funding-rate HTTP/1.1" 200 OK
+2025-09-18 15:41:29,513 - MainProcess - INFO - main - Checking BTC dominance realtime data...
+2025-09-18 15:41:29,515 - MainProcess - WARNING - main - BTC DOMINANCE ALERT: Data is 521.49 minutes old (tolerance: 30 minutes)
+INFO:     192.168.110.164:44242 - "GET /crypto/monitoring/btc-dominance HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2025-09-18 15:47:18,215 - MainProcess - INFO - main - Shutting down application...
+2025-09-18 15:47:18,215 - MainProcess - INFO - main - Application stopped successfully
+INFO:     Application shutdown complete.
+INFO:     Finished server process [641052]
+INFO:     Started server process [649130]
+INFO:     Waiting for application startup.
+2025-09-18 15:47:20,368 - MainProcess - INFO - main - Starting application...
+2025-09-18 15:47:20,368 - MainProcess - INFO - main - Application started successfully
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8010 (Press CTRL+C to quit)
+INFO:     127.0.0.1:49278 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49290 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49290 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49298 - "GET /crypto/funding_rate_historical/BTCUSDT/10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55262 - "GET /crypto/btc_dominance_historical/10 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55268 - "GET /crypto/funding_rate_realtime/BTCUSDT HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55268 - "GET /crypto/funding_rate_realtime/BTCUSDT HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49908 - "GET /crypto/btc_dominance_realtime/ HTTP/1.1" 200 OK
+2025-09-18 15:48:31,464 - MainProcess - INFO - main - Checking funding rate data for all cycles...
+INFO:     127.0.0.1:49918 - "GET /crypto/monitoring/funding-rate HTTP/1.1" 200 OK
+2025-09-18 15:48:57,878 - MainProcess - INFO - main - Checking BTC dominance data for today...
+2025-09-18 15:48:57,882 - MainProcess - INFO - main - Found 1 BTC dominance records for today
+INFO:     127.0.0.1:39154 - "GET /crypto/monitoring/btc-dominance HTTP/1.1" 200 OK
+INFO:     192.168.110.176:55448 - "GET /docs HTTP/1.1" 200 OK
+INFO:     192.168.110.176:55448 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     192.168.110.176:55449 - "GET /docs HTTP/1.1" 200 OK
+INFO:     192.168.110.176:55449 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     192.168.110.176:55467 - "GET /docs HTTP/1.1" 200 OK
+INFO:     192.168.110.176:55467 - "GET /openapi.json HTTP/1.1" 200 OK
+2025-09-18 15:54:52,313 - MainProcess - INFO - main - Checking funding rate data for all cycles...
+INFO:     192.168.110.164:38322 - "GET /crypto/monitoring/funding-rate HTTP/1.1" 200 OK

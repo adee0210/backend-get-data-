@@ -1,47 +1,30 @@
-from fastapi import APIRouter, Depends, BackgroundTasks
+from fastapi import APIRouter, Depends
 from typing import Dict, Any
-from src.service.monitoring_service import (
-    FundingRateMonitorService,
-    get_funding_rate_monitor_service,
+from src.service.monitoring_services import (
+    FundingRateMonitoringService,
+    BTCDominanceMonitoringService,
+    get_funding_rate_monitoring_service,
+    get_btc_dominance_monitoring_service,
 )
 
 
 class MonitoringController:
-    """Controller để quản lý monitoring funding rate data"""
 
-    router = APIRouter(prefix="/monitoring/funding_rate", tags=["monitoring"])
+    router = APIRouter(prefix="/crypto/monitoring", tags=["crypto-monitoring"])
 
-    @router.get("/check", response_model=Dict[str, Any])
-    async def check_funding_rate_data(
-        service: FundingRateMonitorService = Depends(get_funding_rate_monitor_service),
+    @router.get("/funding-rate", response_model=Dict[str, Any])
+    async def check_funding_rate(
+        service: FundingRateMonitoringService = Depends(get_funding_rate_monitoring_service),
     ) -> Dict[str, Any]:
-        """
-        Check funding rate data immediately
-        """
-        result = await service.check_funding_rate_data()
+        result = await service.check_funding_rate()
         return result
 
-    @router.get("/status", response_model=Dict[str, Any])
-    async def get_monitoring_status(
-        service: FundingRateMonitorService = Depends(get_funding_rate_monitor_service),
+    @router.get("/btc-dominance", response_model=Dict[str, Any])
+    async def check_btc_dominance(
+        service: BTCDominanceMonitoringService = Depends(get_btc_dominance_monitoring_service),
     ) -> Dict[str, Any]:
-        """
-        Get current monitoring status
-        """
-        status = await service.get_monitoring_status()
-        return status
-
-    @router.post("/check-async")
-    async def check_funding_rate_data_async(
-        background_tasks: BackgroundTasks,
-        service: FundingRateMonitorService = Depends(get_funding_rate_monitor_service),
-    ) -> Dict[str, str]:
-        """
-        Run funding rate data check in background
-        """
-        background_tasks.add_task(service.check_funding_rate_data)
-        return {"message": "Funding rate data check has been initiated in background"}
+        result = await service.check_btc_dominance()
+        return result
 
 
-# Tạo instance controller để sử dụng trong main.py
 monitoring_controller = MonitoringController()

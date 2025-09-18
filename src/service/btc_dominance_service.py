@@ -19,6 +19,7 @@ class BTCDominanceService:
             return BTCDominanceResponse(data=[])  # Trả về rỗng nếu days không hợp lệ
         
         db = self._client[self._db_name]
+        # history collection is the same raw collection
         col = db[self._history_col]
         end_date = datetime.utcnow()
         start_date = end_date - timedelta(days=days)
@@ -27,78 +28,138 @@ class BTCDominanceService:
         end_date_dt = end_date
         
         loop = asyncio.get_running_loop()
-        
-        def _query():
-            # Dùng projection để chỉ lấy các trường cần thiết (giảm transfer)
+
+        # First try: query by timestamp_ms range (most robust when data stores ms)
+        start_ms = int(start_date_dt.timestamp() * 1000)
+        end_ms = int(end_date_dt.timestamp() * 1000)
+        # Debug: log db/collection and computed ranges
+        try:
+            self._logger.debug("Querying DB=%s Collection=%s start=%s end=%s start_ms=%d end_ms=%d", self._db_name, self._history_col, start_date_dt.isoformat(), end_date_dt.isoformat(), start_ms, end_ms)
+        except Exception:
+            pass
+
+        def _query_by_timestamp_ms():
+            # Prefer aggregation that converts timestamp_ms to long (handles numeric or string stored values)
+            try:
+                pipeline = [
+                    {
+                        "$match": {
+                            "$expr": {
+                                "$and": [
+                                    {"$gte": [{"$toLong": "$timestamp_ms"}, start_ms]},
+                                    {"$lte": [{"$toLong": "$timestamp_ms"}, end_ms]},
+                                ]
+                            }
+                        }
+                    },
+                    {"$sort": {"timestamp_ms": -1}},
+                    {"$project": {"_id": 1, "timestamp_ms": 1, "open": 1, "high": 1, "low": 1, "close": 1, "volume": 1, "datetime": 1}},
+                ]
+                return list(col.aggregate(pipeline))
+            except Exception:
+                # Fallback to numeric find (works when timestamp_ms stored as number)
+                projection = {"_id": 1, "timestamp_ms": 1, "open": 1, "high": 1, "low": 1, "close": 1, "volume": 1, "datetime": 1}
+                cursor = col.find({"timestamp_ms": {"$gte": start_ms, "$lte": end_ms}}, projection).sort([("timestamp_ms", -1)])
+                return list(cursor)
+
+        # Second try: use $dateFromString to parse `datetime` strings with format "%Y-%m-%d %H:%M:%S"
+        def _query_by_datefromstring():
             pipeline = [
                 {
-                    # Dùng $expr + $toDate để so sánh được cả khi field 'datetime' là string ISO hoặc Date
                     "$match": {
                         "$expr": {
                             "$and": [
-                                {"$gte": [{"$toDate": "$datetime"}, start_date_dt]},
-                                {"$lte": [{"$toDate": "$datetime"}, end_date_dt]},
+                                {"$gte": [{"$dateFromString": {"dateString": "$datetime", "format": "%Y-%m-%d %H:%M:%S"}}, start_date_dt]},
+                                {"$lte": [{"$dateFromString": {"dateString": "$datetime", "format": "%Y-%m-%d %H:%M:%S"}}, end_date_dt]},
                             ]
                         }
                     }
                 },
-                {"$sort": {"datetime": -1}},
-                # Nếu collection có rất nhiều bản ghi, client có thể yêu cầu limit;
-                # hiện tại không tự giới hạn để trả đủ ngày yêu cầu, nhưng có thể thêm if cần.
-                {
-                    "$project": {
-                        "_id": 0,
-                        "open": 1,
-                        "high": 1,
-                        "low": 1,
-                        "close": 1,
-                        "volume": 1,
-                        "datetime": 1,
-                    }
-                }
+                {"$sort": {"timestamp_ms": -1, "datetime": -1}},
+                {"$project": {"_id": 1, "timestamp_ms": 1, "open": 1, "high": 1, "low": 1, "close": 1, "volume": 1, "datetime": 1}},
             ]
             return list(col.aggregate(pipeline))
-        
-        docs = await loop.run_in_executor(None, _query)
+
+        # Third fallback: try original $toDate approach (may work for ISO strings)
+        def _fallback_query():
+            pipeline2 = [
+                {"$match": {"datetime": {"$gte": start_date_dt, "$lte": end_date_dt}}},
+                {"$sort": {"datetime": -1}},
+                {"$project": {"_id": 1, "timestamp_ms": 1, "open": 1, "high": 1, "low": 1, "close": 1, "volume": 1, "datetime": 1}},
+            ]
+            return list(col.aggregate(pipeline2))
+
+        # Try queries in order: timestamp_ms -> dateFromString -> fallback
+        docs = await loop.run_in_executor(None, _query_by_timestamp_ms)
+        if not docs:
+            docs = await loop.run_in_executor(None, _query_by_datefromstring)
+
+        # If still empty, try matching datetime stored as plain string range
+        if not docs:
+            def _query_by_datetime_string():
+                start_str = start_date_dt.strftime("%Y-%m-%d %H:%M:%S")
+                end_str = end_date_dt.strftime("%Y-%m-%d %H:%M:%S")
+                projection = {"_id": 1, "timestamp_ms": 1, "open": 1, "high": 1, "low": 1, "close": 1, "volume": 1, "datetime": 1}
+                cursor = col.find({"datetime": {"$gte": start_str, "$lte": end_str}}, projection).sort([("datetime", -1)])
+                return list(cursor)
+
+            docs = await loop.run_in_executor(None, _query_by_datetime_string)
+
+        if not docs:
+            docs = await loop.run_in_executor(None, _fallback_query)
+
         # Ghi log để debug vì user báo không có dữ liệu
         try:
             self._logger.info("BTC dominance historical query returned %d documents", len(docs))
             if len(docs) > 0:
-                # log một sample (tránh log toàn bộ list nếu quá lớn)
                 sample = docs[0]
-                # Convert sample to string safely
-                self._logger.debug("Sample doc keys: %s", list(sample.keys()))
+                # Log small sample of fields to help debugging
+                sample_preview = {k: sample.get(k) for k in ("_id", "timestamp_ms", "datetime", "close")}
+                self._logger.debug("Sample doc preview: %s", sample_preview)
         except Exception:
             pass
-
-        # Nếu không có docs, thử fallback: query bằng match đơn giản (trường datetime có thể là bson datetime)
+        # If still empty, log collection count and one sample doc to help debugging
         if not docs:
-            def _fallback_query():
-                pipeline2 = [
-                    {"$match": {"datetime": {"$gte": start_date_dt, "$lte": end_date_dt}}},
-                    {"$sort": {"datetime": -1}},
-                    {"$project": {"_id": 0, "open": 1, "high": 1, "low": 1, "close": 1, "volume": 1, "datetime": 1}},
-                ]
-                return list(col.aggregate(pipeline2))
-
-            docs = await loop.run_in_executor(None, _fallback_query)
             try:
-                self._logger.info("Fallback query returned %d documents", len(docs))
-            except Exception:
-                pass
+                total = col.count_documents({})
+                sample_doc = col.find_one()
+                self._logger.debug("Collection %s total documents=%d", self._history_col, total)
+                if sample_doc:
+                    preview = {k: sample_doc.get(k) for k in ("_id", "timestamp_ms", "datetime", "close")}
+                    self._logger.debug("Collection sample doc preview: %s", preview)
+            except Exception as e:
+                self._logger.debug("Could not get collection stats/sample: %s", str(e))
         
         # Chuyển đổi thành các model BTCDominanceModel
         data: List[Dict[str, Any]] = []
         for doc in docs:
-            doc.pop('_id', None)
-            # Nếu datetime là string (dữ liệu cũ), parse một lần; ưu tiên datetime type trong DB
+            # Keep _id if present; map timestamp_ms and parse datetime if needed
+            # Do not remove _id; Pydantic model accepts optional _id
             if isinstance(doc.get('datetime'), str):
                 try:
-                    doc['datetime'] = datetime.fromisoformat(doc['datetime'].replace('Z', '+00:00'))
+                    # Expecting format "YYYY-MM-DD HH:MM:SS"
+                    doc['datetime'] = datetime.strptime(doc['datetime'], "%Y-%m-%d %H:%M:%S")
                 except Exception:
-                    # Nếu parsing thất bại, bỏ trường datetime để tránh lỗi
-                    doc.pop('datetime', None)
-            # Kiểm soát: tạo model để validate và ngay lập tức dump về dict
+                    try:
+                        doc['datetime'] = datetime.fromisoformat(doc['datetime'].replace('Z', '+00:00'))
+                    except Exception:
+                        doc.pop('datetime', None)
+
+            # Ensure numeric fields exist and convert if necessary
+            for fld in ('open', 'high', 'low', 'close'):
+                if fld in doc:
+                    try:
+                        doc[fld] = float(doc[fld])
+                    except Exception:
+                        doc[fld] = None
+
+            # timestamp_ms may be int or string in DB
+            if 'timestamp_ms' in doc:
+                try:
+                    doc['timestamp_ms'] = int(doc['timestamp_ms'])
+                except Exception:
+                    doc['timestamp_ms'] = None
+
             btc_dominance = BTCDominanceModel(**doc)
             data.append(btc_dominance.model_dump())
         
@@ -106,29 +167,72 @@ class BTCDominanceService:
 
     async def get_realtime_btc_dominance_data(self, request: RealtimeBTCDominanceRequest) -> RealtimeBTCDominanceResponse:
         db = self._client[self._db_name]
+        # realtime uses the same raw collection and we pick the latest by timestamp_ms
         col = db[self._realtime_col]
         
         loop = asyncio.get_running_loop()
         
         def _query():
-            # Lấy document mới nhất theo datetime
-            doc = col.find_one(sort=[("datetime", -1)])
-            return doc
+            # Prefer sorting by timestamp_ms if available, fallback to datetime
+            try:
+                doc = col.find_one(sort=[("timestamp_ms", -1)])
+                if doc:
+                    return doc
+            except Exception:
+                # some mongodb servers or drivers may error if field missing or index missing
+                pass
+
+            # Fallback: try sorting by datetime field
+            try:
+                doc = col.find_one(sort=[("datetime", -1)])
+                return doc
+            except Exception:
+                return None
         
         doc = await loop.run_in_executor(None, _query)
-        
+
         if doc:
-            doc.pop('_id', None)
+            # Map and parse similar to historical
+            try:
+                self._logger.debug("Realtime doc found keys: %s", list(doc.keys()))
+            except Exception:
+                pass
             if isinstance(doc.get('datetime'), str):
                 try:
-                    doc['datetime'] = datetime.fromisoformat(doc['datetime'].replace('Z', '+00:00'))
+                    doc['datetime'] = datetime.strptime(doc['datetime'], "%Y-%m-%d %H:%M:%S")
                 except Exception:
-                    doc.pop('datetime', None)
+                    try:
+                        doc['datetime'] = datetime.fromisoformat(doc['datetime'].replace('Z', '+00:00'))
+                    except Exception:
+                        doc.pop('datetime', None)
+
+            for fld in ('open', 'high', 'low', 'close'):
+                if fld in doc:
+                    try:
+                        doc[fld] = float(doc[fld])
+                    except Exception:
+                        doc[fld] = None
+
+            if 'timestamp_ms' in doc:
+                try:
+                    doc['timestamp_ms'] = int(doc['timestamp_ms'])
+                except Exception:
+                    doc['timestamp_ms'] = None
+
             realtime_data = RealtimeBTCDominanceModel(**doc)
-            # Trả về dict để khớp với DTO (list of models) – DTO expects model instances but Pydantic v2
-            # sẽ accept dicts in list too; keep consistent with historical endpoint
             return RealtimeBTCDominanceResponse(data=[realtime_data.model_dump()])
         else:
+            # Log collection status to help debugging if realtime not found
+            try:
+                total = col.count_documents({})
+                sample_doc = col.find_one()
+                self._logger.debug("Realtime collection %s total documents=%d", self._realtime_col, total)
+                if sample_doc:
+                    preview = {k: sample_doc.get(k) for k in ("_id", "timestamp_ms", "datetime", "close")}
+                    self._logger.debug("Realtime collection sample: %s", preview)
+            except Exception as e:
+                self._logger.debug("Could not get realtime collection stats/sample: %s", str(e))
+
             return RealtimeBTCDominanceResponse(data=[])
 
 

@@ -1,26 +1,31 @@
 from pydantic import BaseModel
-from datetime import datetime
+import datetime as dt
+from typing import Optional
 
 
 class BTCDominanceModel(BaseModel):
-    open:float
-    high:float
-    low:float
-    close:float
-    volume:float
-    datetime:datetime
+    _id: Optional[str] = None
+    timestamp_ms: Optional[int] = None
+    open: Optional[float] = None
+    high: Optional[float] = None
+    low: Optional[float] = None
+    close: Optional[float] = None
+    volume: Optional[float] = None
+    datetime: Optional[dt.datetime] = None
 
     class Config:
         from_attributes = True
 
 
 class RealtimeBTCDominanceModel(BaseModel):
-    open:float
-    high:float
-    low:float
-    close:float
-    volume:float
-    datetime:datetime
+    _id: Optional[str] = None
+    timestamp_ms: Optional[int] = None
+    open: Optional[float] = None
+    high: Optional[float] = None
+    low: Optional[float] = None
+    close: Optional[float] = None
+    volume: Optional[float] = None
+    datetime: Optional[dt.datetime] = None
 
     class Config:
         from_attributes = True

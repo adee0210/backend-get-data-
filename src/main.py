@@ -11,7 +11,6 @@ from src.controller.v1.funding_rate import (
     RealtimeFundingRateController,
 )
 from src.controller.v1.monitoring import monitoring_controller
-from src.service.scheduler_service import start_monitoring, stop_monitoring
 from src.config.logger_config import logger
 import sys
 import os
@@ -25,23 +24,13 @@ async def lifespan(app: FastAPI):
     """Quản lý lifecycle của ứng dụng"""
     # Startup
     logger.info("Starting application...")
-    try:
-        # Khởi động monitoring scheduler
-        start_monitoring()
-        logger.info("Monitoring system started successfully")
-    except Exception as e:
-        logger.error(f"Error starting monitoring: {str(e)}")
+    logger.info("Application started successfully")
 
     yield
 
     # Shutdown
     logger.info("Shutting down application...")
-    try:
-        # Dừng monitoring scheduler
-        stop_monitoring()
-        logger.info("Monitoring system stopped successfully")
-    except Exception as e:
-        logger.error(f"Error stopping monitoring: {str(e)}")
+    logger.info("Application stopped successfully")
 
 
 app = FastAPI(
@@ -70,6 +59,10 @@ async def health_check():
     """Detailed health check"""
     return {
         "status": "healthy",
-        "timestamp": "2025-09-18",
-        "services": {"api": "running", "database": "connected", "monitoring": "active"},
+        "timestamp": "2025-09-18T00:00:00Z",
+        "services": {
+            "api": "running", 
+            "database": "connected", 
+            "monitoring": "available"
+        },
     }
