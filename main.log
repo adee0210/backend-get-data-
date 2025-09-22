@@ -245,3 +245,175 @@ INFO:     192.168.110.176:55467 - "GET /docs HTTP/1.1" 200 OK
 INFO:     192.168.110.176:55467 - "GET /openapi.json HTTP/1.1" 200 OK
 2025-09-18 15:54:52,313 - MainProcess - INFO - main - Checking funding rate data for all cycles...
 INFO:     192.168.110.164:38322 - "GET /crypto/monitoring/funding-rate HTTP/1.1" 200 OK
+INFO:     192.168.110.176:55475 - "GET / HTTP/1.1" 200 OK
+INFO:     192.168.110.176:55478 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.110.176:55599 - "GET /docs HTTP/1.1" 200 OK
+INFO:     192.168.110.176:55599 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     192.168.110.176:55860 - "GET /docs HTTP/1.1" 200 OK
+INFO:     192.168.110.176:55860 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     192.168.110.176:55861 - "GET /crypto/funding_rate_historical/BTCUSDT/10 HTTP/1.1" 200 OK
+INFO:     192.168.110.176:56218 - "GET /docs HTTP/1.1" 200 OK
+INFO:     192.168.110.176:56218 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     192.168.110.176:56302 - "GET /docs HTTP/1.1" 200 OK
+INFO:     192.168.110.176:56302 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     192.168.110.160:54224 - "GET /docs HTTP/1.1" 200 OK
+INFO:     192.168.110.160:54224 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     192.168.110.160:54239 - "GET /crypto/btc_dominance_historical/10 HTTP/1.1" 200 OK
+INFO:     192.168.110.160:54311 - "GET /crypto/btc_dominance_historical/10 HTTP/1.1" 200 OK
+INFO:     192.168.110.160:54327 - "GET /crypto/btc_dominance_historical/100 HTTP/1.1" 200 OK
+INFO:     192.168.110.160:54335 - "GET /crypto/btc_dominance_historical/100000 HTTP/1.1" 200 OK
+INFO:     192.168.110.160:57125 - "GET /docs HTTP/1.1" 200 OK
+INFO:     192.168.110.160:57125 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     192.168.110.160:57141 - "GET /crypto/funding_rate_historical/BTC/10 HTTP/1.1" 200 OK
+INFO:     192.168.110.160:57153 - "GET /crypto/funding_rate_historical/BTC/10 HTTP/1.1" 200 OK
+INFO:     192.168.110.160:57160 - "GET /crypto/funding_rate_historical/BTCUSDT/10 HTTP/1.1" 200 OK
+INFO:     192.168.110.160:57173 - "GET /crypto/funding_rate_historical/BTCUSDT/0 HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/starlette/routing.py", line 78, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/starlette/routing.py", line 75, in app
+    response = await f(request)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/fastapi/routing.py", line 302, in app
+    raw_response = await run_endpoint_function(
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/fastapi/routing.py", line 213, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/home/duc_le/backend-get-data-/src/controller/v1/funding_rate.py", line 22, in get_funding_rate_controller
+    response = await service.get_funding_rate_data(request)
+  File "/home/duc_le/backend-get-data-/src/service/funding_rate_service.py", line 86, in get_funding_rate_data
+    docs = await loop.run_in_executor(None, _query)
+  File "/usr/lib/python3.10/concurrent/futures/thread.py", line 58, in run
+    result = self.fn(*self.args, **self.kwargs)
+  File "/home/duc_le/backend-get-data-/src/service/funding_rate_service.py", line 62, in _query
+    recent_dates = [doc["_id"] for doc in coll.aggregate(date_pipeline)]
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/pymongo/synchronous/collection.py", line 3015, in aggregate
+    return self._aggregate(
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/pymongo/_csot.py", line 125, in csot_wrapper
+    return func(self, *args, **kwargs)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/pymongo/synchronous/collection.py", line 2913, in _aggregate
+    return self._database.client._retryable_read(
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/pymongo/synchronous/mongo_client.py", line 2047, in _retryable_read
+    return self._retry_internal(
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/pymongo/_csot.py", line 125, in csot_wrapper
+    return func(self, *args, **kwargs)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/pymongo/synchronous/mongo_client.py", line 2014, in _retry_internal
+    ).run()
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/pymongo/synchronous/mongo_client.py", line 2765, in run
+    return self._read() if self._is_read else self._write()
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/pymongo/synchronous/mongo_client.py", line 2926, in _read
+    return self._func(self._session, self._server, conn, read_pref)  # type: ignore
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/pymongo/synchronous/aggregation.py", line 164, in get_cursor
+    result = conn.command(
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/pymongo/synchronous/helpers.py", line 47, in inner
+    return func(*args, **kwargs)
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/pymongo/synchronous/pool.py", line 452, in command
+    return command(
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/pymongo/synchronous/network.py", line 212, in command
+    helpers_shared._check_command_response(
+  File "/home/duc_le/backend-get-data-/.venv/lib/python3.10/site-packages/pymongo/helpers_shared.py", line 284, in _check_command_response
+    raise OperationFailure(errmsg, code, response, max_wire_version)
+pymongo.errors.OperationFailure: the limit must be positive, full error: {'ok': 0.0, 'errmsg': 'the limit must be positive', 'code': 15958, 'codeName': 'Location15958'}
+INFO:     192.168.110.160:57178 - "GET /crypto/funding_rate_historical/BTCUSDT/1 HTTP/1.1" 200 OK
+INFO:     192.168.110.160:57178 - "GET /crypto/funding_rate_historical/BTCUSDT/2 HTTP/1.1" 200 OK
+INFO:     192.168.110.160:57210 - "GET /crypto/btc_dominance_historical/10 HTTP/1.1" 200 OK
+INFO:     192.168.110.160:57212 - "GET /crypto/btc_dominance_historical/10 HTTP/1.1" 200 OK
+INFO:     192.168.110.160:57232 - "GET /crypto/btc_dominance_historical/5 HTTP/1.1" 200 OK
+INFO:     192.168.110.160:57253 - "GET /crypto/funding_rate_realtime/BTCUSDT HTTP/1.1" 200 OK
+INFO:     192.168.110.160:57264 - "GET /crypto/funding_rate_realtime/BTCUSDT HTTP/1.1" 200 OK
+INFO:     192.168.110.160:57269 - "GET /crypto/funding_rate_realtime/BTCUSDT HTTP/1.1" 200 OK
+INFO:     192.168.110.160:57269 - "GET /crypto/funding_rate_realtime/BTCUSDT HTTP/1.1" 200 OK
+INFO:     192.168.110.160:57269 - "GET /crypto/funding_rate_realtime/BTCUSDT HTTP/1.1" 200 OK
+2025-09-22 08:50:42,175 - MainProcess - INFO - main - Checking funding rate data for all cycles...
+INFO:     192.168.110.160:57285 - "GET /crypto/monitoring/funding-rate HTTP/1.1" 200 OK
+INFO:     192.168.110.160:57303 - "GET /crypto/btc_dominance_realtime/ HTTP/1.1" 200 OK
+INFO:     192.168.110.160:57315 - "GET /crypto/btc_dominance_realtime/ HTTP/1.1" 200 OK
+INFO:     192.168.110.160:57318 - "GET /crypto/btc_dominance_realtime/ HTTP/1.1" 200 OK
+INFO:     192.168.110.160:57318 - "GET /crypto/btc_dominance_realtime/ HTTP/1.1" 200 OK
+INFO:     192.168.110.160:57327 - "GET /crypto/btc_dominance_historical/5 HTTP/1.1" 200 OK
+2025-09-22 08:57:16,269 - MainProcess - INFO - main - Checking funding rate data for all cycles...
+INFO:     192.168.110.160:57547 - "GET /crypto/monitoring/funding-rate HTTP/1.1" 200 OK
+2025-09-22 08:57:23,052 - MainProcess - INFO - main - Checking funding rate data for all cycles...
+INFO:     192.168.110.160:57550 - "GET /crypto/monitoring/funding-rate HTTP/1.1" 200 OK
+2025-09-22 09:01:53,224 - MainProcess - INFO - main - Checking BTC dominance data for today...
+2025-09-22 09:01:53,234 - MainProcess - INFO - main - Found 1 BTC dominance records for today
+INFO:     192.168.110.160:57793 - "GET /crypto/monitoring/btc-dominance HTTP/1.1" 200 OK
+2025-09-22 09:02:01,913 - MainProcess - INFO - main - Checking BTC dominance data for today...
+2025-09-22 09:02:01,915 - MainProcess - INFO - main - Found 1 BTC dominance records for today
+INFO:     192.168.110.160:57802 - "GET /crypto/monitoring/btc-dominance HTTP/1.1" 200 OK
+INFO:     192.168.110.176:57343 - "GET /docs HTTP/1.1" 200 OK
+INFO:     192.168.110.176:57343 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     192.168.110.176:57344 - "GET /crypto/funding_rate_historical/BTCUSDT/10 HTTP/1.1" 200 OK
+INFO:     192.168.110.176:57386 - "GET /crypto/btc_dominance_historical/5 HTTP/1.1" 200 OK
+INFO:     192.168.110.176:57412 - "GET /crypto/funding_rate_realtime/BTCUSDT HTTP/1.1" 200 OK
+INFO:     192.168.110.176:57414 - "GET /crypto/btc_dominance_realtime/ HTTP/1.1" 200 OK
+2025-09-22 13:03:41,114 - MainProcess - INFO - main - Checking funding rate data for all cycles...
+2025-09-22 13:03:41,121 - MainProcess - WARNING - main - FUNDING RATE 1H ALERT: 3 symbols missing data at 2025-09-22 13:00:00: BTCUSDT, ETHUSDT, BNBUSDT
+INFO:     192.168.110.176:57416 - "GET /crypto/monitoring/funding-rate HTTP/1.1" 200 OK
+2025-09-22 13:03:57,341 - MainProcess - INFO - main - Checking BTC dominance data for today...
+2025-09-22 13:03:57,351 - MainProcess - INFO - main - Found 1 BTC dominance records for today
+INFO:     192.168.110.176:57418 - "GET /crypto/monitoring/btc-dominance HTTP/1.1" 200 OK
+2025-09-22 13:03:59,073 - MainProcess - INFO - main - Checking BTC dominance data for today...
+2025-09-22 13:03:59,084 - MainProcess - INFO - main - Found 1 BTC dominance records for today
+INFO:     192.168.110.176:57418 - "GET /crypto/monitoring/btc-dominance HTTP/1.1" 200 OK
+INFO:     192.168.110.176:57420 - "GET / HTTP/1.1" 200 OK
+INFO:     192.168.110.176:57422 - "GET /health HTTP/1.1" 200 OK
+INFO:     192.168.110.176:57424 - "GET /crypto/funding_rate_historical/BTCUSDT/10 HTTP/1.1" 200 OK
+INFO:     192.168.110.176:57500 - "GET /crypto/funding_rate_historical/DOGEUSDT/10 HTTP/1.1" 200 OK
+INFO:     192.168.110.176:57531 - "GET /crypto/funding_rate_realtime/BTCUSDT HTTP/1.1" 200 OK
+INFO:     192.168.110.176:57585 - "GET /docs HTTP/1.1" 200 OK
+INFO:     192.168.110.176:57585 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     192.168.110.176:57586 - "GET /crypto/btc_dominance_realtime/ HTTP/1.1" 200 OK
+INFO:     192.168.110.176:57589 - "GET /crypto/btc_dominance_historical/50 HTTP/1.1" 200 OK
+INFO:     192.168.110.176:57623 - "GET /crypto/funding_rate_historical/DOGEUSDT/10 HTTP/1.1" 200 OK
+INFO:     192.168.110.176:59828 - "GET /crypto/funding_rate_historical/DOGEUSDT/10 HTTP/1.1" 200 OK
+INFO:     192.168.110.176:59845 - "GET /crypto/funding_rate_historical/DOGEUSDT/10000 HTTP/1.1" 200 OK
+INFO:     192.168.110.160:54041 - "GET /crypto/btc_dominance_historical/5 HTTP/1.1" 200 OK
+INFO:     192.168.110.160:54324 - "GET /crypto/funding_rate_realtime/BTCUSDT HTTP/1.1" 200 OK
+INFO:     192.168.110.176:60084 - "GET /docs HTTP/1.1" 200 OK
+INFO:     192.168.110.176:60084 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     192.168.110.176:60085 - "GET /crypto/funding_rate_realtime/BTCUSDT HTTP/1.1" 200 OK
+INFO:     192.168.110.176:60099 - "GET /crypto/btc_dominance_realtime/ HTTP/1.1" 200 OK
+INFO:     192.168.110.176:60185 - "GET /crypto/btc_dominance_realtime/ HTTP/1.1" 200 OK
+INFO:     192.168.110.176:60185 - "GET /crypto/btc_dominance_realtime/ HTTP/1.1" 200 OK
+INFO:     192.168.110.176:60185 - "GET /crypto/btc_dominance_realtime/ HTTP/1.1" 200 OK
+INFO:     192.168.110.176:60185 - "GET /crypto/btc_dominance_realtime/ HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2025-09-22 17:22:06,241 - MainProcess - INFO - main - Shutting down application...
+2025-09-22 17:22:06,248 - MainProcess - INFO - main - Application stopped successfully
+INFO:     Application shutdown complete.
+INFO:     Finished server process [649130]
+INFO:     Started server process [3596456]
+INFO:     Waiting for application startup.
+2025-09-22 17:22:10,498 - MainProcess - INFO - main - Starting application...
+2025-09-22 17:22:10,498 - MainProcess - INFO - main - Application started successfully
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8010 (Press CTRL+C to quit)

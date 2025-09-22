@@ -219,48 +219,54 @@ class BTCDominanceMonitoringService:
         }
 
         try:
-            # Get realtime BTC dominance data
+            # Get realtime BTC dominance data (type: realtime)
             request = RealtimeBTCDominanceRequest()
             response = await self.btc_service.get_realtime_btc_dominance_data(request)
 
             if response.data and len(response.data) > 0:
-                # Filter records for today
+                # Filter records for today with type: realtime
                 today_records = []
-                latest_record = None
+                latest_realtime_record = None
                 
                 for record in response.data:
-                    if record.get("datetime"):
-                        try:
-                            if isinstance(record["datetime"], str):
-                                record_date = record["datetime"][:10]  # Get YYYY-MM-DD part
-                            else:
-                                record_date = record["datetime"].strftime("%Y-%m-%d")
-                            
-                            if record_date == today:
-                                today_records.append(record)
-                            
-                            # Keep track of latest record overall
-                            if latest_record is None:
-                                latest_record = record
+                    # Check if record has type: realtime
+                    if record.get("type") == "realtime":
+                        # Remove type field from record for output
+                        clean_record = {k: v for k, v in record.items() if k != "type"}
+                        
+                        # Check if record is from today
+                        if clean_record.get("datetime"):
+                            try:
+                                if isinstance(clean_record["datetime"], str):
+                                    record_date = clean_record["datetime"][:10]  # Get YYYY-MM-DD part
+                                else:
+                                    record_date = clean_record["datetime"].strftime("%Y-%m-%d")
+                                
+                                if record_date == today:
+                                    today_records.append(clean_record)
+                                
+                                # Keep track of latest realtime record overall
+                                if latest_realtime_record is None:
+                                    latest_realtime_record = clean_record
 
-                        except Exception as e:
-                            logger.warning(f"Cannot parse datetime from record: {str(e)}")
+                            except Exception as e:
+                                logger.warning(f"Cannot parse datetime from realtime record: {str(e)}")
 
-                result["latest_record"] = latest_record
+                result["latest_record"] = latest_realtime_record
                 result["records_count_today"] = len(today_records)
 
                 if today_records:
                     result["has_today_data"] = True
                     result["status"] = "OK"
-                    result["alert_message"] = f"BTC dominance has {len(today_records)} records for today ({today})"
-                    logger.info(f"Found {len(today_records)} BTC dominance records for today")
+                    result["alert_message"] = f"BTC dominance has {len(today_records)} realtime records for today ({today})"
+                    logger.info(f"Found {len(today_records)} BTC dominance realtime records for today")
                 else:
                     result["status"] = "WARNING"
-                    result["alert_message"] = f"BTC DOMINANCE ALERT: No data found for today ({today})"
+                    result["alert_message"] = f"BTC DOMINANCE ALERT: No realtime data found for today ({today})"
                     logger.warning(result["alert_message"])
             else:
                 result["status"] = "ERROR"
-                result["alert_message"] = "BTC DOMINANCE ALERT: No data found in database"
+                result["alert_message"] = "BTC DOMINANCE ALERT: No realtime data found in database"
                 logger.error(result["alert_message"])
 
         except Exception as e:
