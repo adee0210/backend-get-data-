@@ -224,13 +224,19 @@ class BTCDominanceMonitoringService:
             response = await self.btc_service.get_realtime_btc_dominance_data(request)
 
             if response.data and len(response.data) > 0:
+                logger.info(f"Total records received: {len(response.data)}")
+                
                 # Filter records for today with type: realtime
                 today_records = []
                 latest_realtime_record = None
+                realtime_count = 0
                 
-                for record in response.data:
+                for i, record in enumerate(response.data):
+                    logger.debug(f"Record {i}: type={record.get('type')}, datetime={record.get('datetime')}")
+                    
                     # Check if record has type: realtime
                     if record.get("type") == "realtime":
+                        realtime_count += 1
                         # Remove type field from record for output
                         clean_record = {k: v for k, v in record.items() if k != "type"}
                         
@@ -242,6 +248,8 @@ class BTCDominanceMonitoringService:
                                 else:
                                     record_date = clean_record["datetime"].strftime("%Y-%m-%d")
                                 
+                                logger.debug(f"Realtime record date: {record_date}, today: {today}")
+                                
                                 if record_date == today:
                                     today_records.append(clean_record)
                                 
@@ -251,6 +259,8 @@ class BTCDominanceMonitoringService:
 
                             except Exception as e:
                                 logger.warning(f"Cannot parse datetime from realtime record: {str(e)}")
+
+                logger.info(f"Found {realtime_count} realtime records, {len(today_records)} for today")
 
                 result["latest_record"] = latest_realtime_record
                 result["records_count_today"] = len(today_records)

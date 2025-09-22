@@ -18,9 +18,9 @@ DB_FUNDING_RATE = {
 
 DB_BTC_DOMINANCE = {
     "database_name": "btc_dominance",
-    # Both historical and realtime data are stored in the same raw collection
+    # Historical data in raw collection, realtime data in separate collection
     "collection_history_name": "raw_btc_dominance",
-    "collection_realtime_name": "raw_btc_dominance",
+    "collection_realtime_name": "realtime_btc_dominance",
 }
 
 # Telegram Bot Configuration

@@ -417,3 +417,21 @@ INFO:     Waiting for application startup.
 2025-09-22 17:22:10,498 - MainProcess - INFO - main - Application started successfully
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8010 (Press CTRL+C to quit)
+INFO:     192.168.110.176:60246 - "GET /docs HTTP/1.1" 200 OK
+INFO:     192.168.110.176:60246 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     192.168.110.176:60247 - "GET /crypto/btc_dominance_realtime/ HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2025-09-22 17:31:54,990 - MainProcess - INFO - main - Shutting down application...
+2025-09-22 17:31:54,991 - MainProcess - INFO - main - Application stopped successfully
+INFO:     Application shutdown complete.
+INFO:     Finished server process [3596456]
+INFO:     Started server process [3609164]
+INFO:     Waiting for application startup.
+2025-09-22 17:31:59,177 - MainProcess - INFO - main - Starting application...
+2025-09-22 17:31:59,177 - MainProcess - INFO - main - Application started successfully
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8010 (Press CTRL+C to quit)
+INFO:     192.168.110.176:60343 - "GET /docs HTTP/1.1" 200 OK
+INFO:     192.168.110.176:60343 - "GET /openapi.json HTTP/1.1" 200 OK
+INFO:     192.168.110.176:60344 - "GET /crypto/btc_dominance_realtime/ HTTP/1.1" 200 OK
