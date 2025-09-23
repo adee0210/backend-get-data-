@@ -18,9 +18,17 @@ DB_FUNDING_RATE = {
 
 DB_BTC_DOMINANCE = {
     "database_name": "btc_dominance",
-    # Historical data in raw collection, realtime data in separate collection
+    # Both historical and realtime data are stored in the same raw collection
     "collection_history_name": "raw_btc_dominance",
-    "collection_realtime_name": "realtime_btc_dominance",
+    "collection_realtime_name": "raw_btc_dominance",
+}
+
+# ETF Candlestick Configuration
+DB_ETF_CANDLESTICK = {
+    "database_name": "etf_candlestick_db", 
+    # Both historical and realtime data are stored in the same collection
+    "collection_history_name": "etf_candlestick_historical",
+    "collection_realtime_name": "etf_candlestick_historical",
 }
 
 # Telegram Bot Configuration

@@ -2,10 +2,8 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-from src.controller.v1.btc_dominance import (
-    BTCDominanceController,
-    RealtimeBTCDominanceController,
-)
+from src.controller.v1.btc_dominance import btc_dominance_controller
+from src.controller.v1.etf_candlestick import etf_candlestick_controller
 from src.controller.v1.funding_rate import (
     FundingRateController,
     RealtimeFundingRateController,
@@ -42,9 +40,9 @@ app = FastAPI(
 
 # Include routers
 app.include_router(FundingRateController.router)
-app.include_router(BTCDominanceController.router)
+app.include_router(btc_dominance_controller.router)
+app.include_router(etf_candlestick_controller.router)
 app.include_router(RealtimeFundingRateController.router)
-app.include_router(RealtimeBTCDominanceController.router)
 app.include_router(monitoring_controller.router)
 
 

@@ -12,7 +12,7 @@ from src.service.btc_dominance_service import (
     get_btc_dominance_service,
 )
 from src.dto.funding_rate_dto import RealtimeFundingRateRequest
-from src.dto.btc_dominance_dto import RealtimeBTCDominanceRequest
+from src.dto.btc_dominance_dto import BTCDominanceRequest
 
 
 class FundingRateMonitoringService:
@@ -219,64 +219,55 @@ class BTCDominanceMonitoringService:
         }
 
         try:
-            # Get realtime BTC dominance data (type: realtime)
-            request = RealtimeBTCDominanceRequest()
-            response = await self.btc_service.get_realtime_btc_dominance_data(request)
+            # Get latest BTC dominance data (day=0 = latest records from historical collection)
+            request = BTCDominanceRequest(days=0)
+            response = await self.btc_service.get_btc_dominance_data(request)
 
             if response.data and len(response.data) > 0:
-                logger.info(f"Total records received: {len(response.data)}")
+                logger.info(f"Total latest records received: {len(response.data)}")
                 
-                # Filter records for today with type: realtime
+                # Check records for today
                 today_records = []
-                latest_realtime_record = None
-                realtime_count = 0
+                latest_record = None
                 
                 for i, record in enumerate(response.data):
-                    logger.debug(f"Record {i}: type={record.get('type')}, datetime={record.get('datetime')}")
-                    
-                    # Check if record has type: realtime
-                    if record.get("type") == "realtime":
-                        realtime_count += 1
-                        # Remove type field from record for output
-                        clean_record = {k: v for k, v in record.items() if k != "type"}
-                        
-                        # Check if record is from today
-                        if clean_record.get("datetime"):
-                            try:
-                                if isinstance(clean_record["datetime"], str):
-                                    record_date = clean_record["datetime"][:10]  # Get YYYY-MM-DD part
-                                else:
-                                    record_date = clean_record["datetime"].strftime("%Y-%m-%d")
-                                
-                                logger.debug(f"Realtime record date: {record_date}, today: {today}")
-                                
-                                if record_date == today:
-                                    today_records.append(clean_record)
-                                
-                                # Keep track of latest realtime record overall
-                                if latest_realtime_record is None:
-                                    latest_realtime_record = clean_record
+                    # All records from day=0 are latest records, no need to filter by type
+                    if record.get("datetime"):
+                        try:
+                            if isinstance(record["datetime"], str):
+                                record_date = record["datetime"][:10]  # Get YYYY-MM-DD part
+                            else:
+                                record_date = record["datetime"].strftime("%Y-%m-%d")
+                            
+                            logger.debug(f"Record {i} date: {record_date}, today: {today}")
+                            
+                            if record_date == today:
+                                today_records.append(record)
+                            
+                            # Keep track of latest record overall (first one since sorted by latest)
+                            if latest_record is None:
+                                latest_record = record
 
-                            except Exception as e:
-                                logger.warning(f"Cannot parse datetime from realtime record: {str(e)}")
+                        except Exception as e:
+                            logger.warning(f"Cannot parse datetime from record: {str(e)}")
 
-                logger.info(f"Found {realtime_count} realtime records, {len(today_records)} for today")
+                logger.info(f"Found {len(today_records)} records for today")
 
-                result["latest_record"] = latest_realtime_record
+                result["latest_record"] = latest_record
                 result["records_count_today"] = len(today_records)
 
                 if today_records:
                     result["has_today_data"] = True
                     result["status"] = "OK"
-                    result["alert_message"] = f"BTC dominance has {len(today_records)} realtime records for today ({today})"
-                    logger.info(f"Found {len(today_records)} BTC dominance realtime records for today")
+                    result["alert_message"] = f"BTC dominance has {len(today_records)} records for today ({today})"
+                    logger.info(f"Found {len(today_records)} BTC dominance records for today")
                 else:
                     result["status"] = "WARNING"
-                    result["alert_message"] = f"BTC DOMINANCE ALERT: No realtime data found for today ({today})"
+                    result["alert_message"] = f"BTC DOMINANCE ALERT: No data found for today ({today})"
                     logger.warning(result["alert_message"])
             else:
                 result["status"] = "ERROR"
-                result["alert_message"] = "BTC DOMINANCE ALERT: No realtime data found in database"
+                result["alert_message"] = "BTC DOMINANCE ALERT: No data found in database"
                 logger.error(result["alert_message"])
 
         except Exception as e:

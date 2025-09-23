@@ -13,11 +13,21 @@ class BTCDominanceService:
         self._db_name, self._realtime_col, self._history_col = get_db_and_collections_btcdominance()
         self._logger = logging.getLogger(__name__)
 
-    async def get_historical_btc_dominance_data(self, request: BTCDominanceRequest) -> BTCDominanceResponse:
+    async def get_btc_dominance_data(self, request: BTCDominanceRequest) -> BTCDominanceResponse:
+        """Get BTC dominance data - historical or latest records"""
         days = request.days
-        if days <= 0:
-            return BTCDominanceResponse(data=[])  # Trả về rỗng nếu days không hợp lệ
         
+        if days == 0:
+            # day=0 means realtime (latest records)
+            return await self._get_latest_records()
+        elif days < 0:
+            return BTCDominanceResponse(data=[], total_records=0, request_days=days)
+        
+        # Historical data query
+        return await self._get_historical_data(days)
+
+    async def _get_historical_data(self, days: int) -> BTCDominanceResponse:
+        """Get historical BTC dominance data"""
         db = self._client[self._db_name]
         # history collection is the same raw collection
         col = db[self._history_col]
@@ -163,77 +173,82 @@ class BTCDominanceService:
             btc_dominance = BTCDominanceModel(**doc)
             data.append(btc_dominance.model_dump())
         
-        return BTCDominanceResponse(data=data)
+        return BTCDominanceResponse(
+            data=data,
+            total_records=len(data),
+            request_days=days
+        )
 
-    async def get_realtime_btc_dominance_data(self, request: RealtimeBTCDominanceRequest) -> RealtimeBTCDominanceResponse:
-        db = self._client[self._db_name]
-        # realtime uses the same raw collection and we pick the latest by timestamp_ms
-        col = db[self._realtime_col]
+    async def _get_latest_records(self) -> BTCDominanceResponse:
+        """Get latest records for realtime data (day=0)"""
+        self._logger.info("Getting latest BTC dominance records")
         
-        loop = asyncio.get_running_loop()
-        
-        def _query():
-            # Prefer sorting by timestamp_ms if available, fallback to datetime
-            try:
-                doc = col.find_one(sort=[("timestamp_ms", -1)])
-                if doc:
-                    return doc
-            except Exception:
-                # some mongodb servers or drivers may error if field missing or index missing
-                pass
-
-            # Fallback: try sorting by datetime field
-            try:
-                doc = col.find_one(sort=[("datetime", -1)])
-                return doc
-            except Exception:
-                return None
-        
-        doc = await loop.run_in_executor(None, _query)
-
-        if doc:
-            # Map and parse similar to historical
-            try:
-                self._logger.debug("Realtime doc found keys: %s", list(doc.keys()))
-            except Exception:
-                pass
-            if isinstance(doc.get('datetime'), str):
+        try:
+            db = self._client[self._db_name]
+            col = db[self._history_col]  # Same collection for both historical and latest
+            
+            loop = asyncio.get_running_loop()
+            
+            def _query_latest():
+                # Get latest records sorted by datetime or timestamp_ms
+                cursor = col.find().sort([("datetime", -1), ("timestamp_ms", -1)]).limit(10)
+                return list(cursor)
+            
+            raw_data = await loop.run_in_executor(None, _query_latest)
+            
+            self._logger.info(f"Found {len(raw_data)} latest BTC records")
+            
+            # Convert to model objects
+            data = []
+            for item in raw_data:
                 try:
-                    doc['datetime'] = datetime.strptime(doc['datetime'], "%Y-%m-%d %H:%M:%S")
-                except Exception:
-                    try:
-                        doc['datetime'] = datetime.fromisoformat(doc['datetime'].replace('Z', '+00:00'))
-                    except Exception:
-                        doc.pop('datetime', None)
+                    # Convert ObjectId to string if present
+                    if "_id" in item:
+                        item["_id"] = str(item["_id"])
+                    
+                    # Handle datetime parsing
+                    if isinstance(item.get('datetime'), str):
+                        try:
+                            item['datetime'] = datetime.strptime(item['datetime'], "%Y-%m-%d %H:%M:%S")
+                        except Exception:
+                            try:
+                                item['datetime'] = datetime.fromisoformat(item['datetime'].replace('Z', '+00:00'))
+                            except Exception:
+                                item.pop('datetime', None)
 
-            for fld in ('open', 'high', 'low', 'close'):
-                if fld in doc:
-                    try:
-                        doc[fld] = float(doc[fld])
-                    except Exception:
-                        doc[fld] = None
+                    # Handle numeric fields
+                    for fld in ('open', 'high', 'low', 'close', 'volume'):
+                        if fld in item:
+                            try:
+                                item[fld] = float(item[fld])
+                            except Exception:
+                                item[fld] = None
 
-            if 'timestamp_ms' in doc:
-                try:
-                    doc['timestamp_ms'] = int(doc['timestamp_ms'])
-                except Exception:
-                    doc['timestamp_ms'] = None
-
-            realtime_data = RealtimeBTCDominanceModel(**doc)
-            return RealtimeBTCDominanceResponse(data=[realtime_data.model_dump()])
-        else:
-            # Log collection status to help debugging if realtime not found
-            try:
-                total = col.count_documents({})
-                sample_doc = col.find_one()
-                self._logger.debug("Realtime collection %s total documents=%d", self._realtime_col, total)
-                if sample_doc:
-                    preview = {k: sample_doc.get(k) for k in ("_id", "timestamp_ms", "datetime", "close")}
-                    self._logger.debug("Realtime collection sample: %s", preview)
-            except Exception as e:
-                self._logger.debug("Could not get realtime collection stats/sample: %s", str(e))
-
-            return RealtimeBTCDominanceResponse(data=[])
+                    if 'timestamp_ms' in item:
+                        try:
+                            item['timestamp_ms'] = int(item['timestamp_ms'])
+                        except Exception:
+                            item['timestamp_ms'] = None
+                    
+                    btc_model = BTCDominanceModel(**item)
+                    data.append(btc_model)
+                except Exception as e:
+                    self._logger.warning(f"Error parsing latest BTC item: {str(e)}, item: {item}")
+                    continue
+            
+            return BTCDominanceResponse(
+                data=data,
+                total_records=len(data),
+                request_days=0  # 0 indicates realtime/latest
+            )
+            
+        except Exception as e:
+            self._logger.error(f"Error getting latest BTC records: {str(e)}")
+            return BTCDominanceResponse(
+                data=[],
+                total_records=0,
+                request_days=0
+            )
 
 
 def get_btc_dominance_service():
