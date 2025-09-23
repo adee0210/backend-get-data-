@@ -22,7 +22,8 @@ class ETFCandlestickService:
 
     def _get_collection(self):
         """Get MongoDB collection (both historical and latest use same collection)"""
-        db = self.mongo_config.get_database(self.db_config["database_name"])
+        client = self.mongo_config.get_client()
+        db = client[self.db_config["database_name"]]
         collection_name = self.db_config["collection_history_name"]
         return db[collection_name]
 

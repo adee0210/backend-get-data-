@@ -15,7 +15,7 @@ class ETFCandlestickController:
 
     router = APIRouter(prefix="/crypto/etf-candlestick", tags=["etf-candlestick"])
 
-    @router.get("/{day}/{symbol}", response_model=ETFCandlestickResponse)
+    @router.get("/{symbol}/{day}", response_model=ETFCandlestickResponse)
     async def get_etf_candlestick_data(
         day: int,
         symbol: str,

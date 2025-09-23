@@ -494,3 +494,38 @@ INFO:     127.0.0.1:35028 - "GET /crypto/etf-candlestick/10/E1VFVN30 HTTP/1.1" 2
 2025-09-23 17:29:09,879 - MainProcess - INFO - main - Getting ETF candlestick data for 10 days, symbol: E1VFVN30
 2025-09-23 17:29:09,880 - MainProcess - ERROR - main - Error getting ETF candlestick data: 'MongoDBConfig' object has no attribute 'get_database'
 INFO:     127.0.0.1:35028 - "GET /crypto/etf-candlestick/10/E1VFVN30 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2025-09-23 17:33:17,404 - MainProcess - INFO - main - Shutting down application...
+2025-09-23 17:33:17,405 - MainProcess - INFO - main - Application stopped successfully
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1152939]
+INFO:     Started server process [1158645]
+INFO:     Waiting for application startup.
+2025-09-23 17:33:21,648 - MainProcess - INFO - main - Starting application...
+2025-09-23 17:33:21,648 - MainProcess - INFO - main - Application started successfully
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8010 (Press CTRL+C to quit)
+INFO:     127.0.0.1:57716 - "GET /docs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57716 - "GET /openapi.json HTTP/1.1" 200 OK
+2025-09-23 17:33:42,392 - MainProcess - INFO - main - Getting ETF candlestick data for 10 days, symbol: E1VFVN30
+2025-09-23 17:33:42,393 - MainProcess - ERROR - main - Error getting ETF candlestick data: 'MongoDBConfig' object has no attribute 'get_database'
+INFO:     127.0.0.1:57724 - "GET /crypto/etf-candlestick/10/E1VFVN30 HTTP/1.1" 200 OK
+2025-09-23 17:33:45,789 - MainProcess - INFO - main - Getting ETF candlestick data for 10 days, symbol: E1VFVN30
+2025-09-23 17:33:45,789 - MainProcess - ERROR - main - Error getting ETF candlestick data: 'MongoDBConfig' object has no attribute 'get_database'
+INFO:     127.0.0.1:57724 - "GET /crypto/etf-candlestick/10/E1VFVN30 HTTP/1.1" 200 OK
+2025-09-23 17:33:49,360 - MainProcess - INFO - main - Getting ETF candlestick data for 10 days, symbol: E1VFVN30
+2025-09-23 17:33:49,360 - MainProcess - ERROR - main - Error getting ETF candlestick data: 'MongoDBConfig' object has no attribute 'get_database'
+INFO:     192.168.110.164:50858 - "GET /crypto/etf-candlestick/10/E1VFVN30 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+2025-09-23 17:34:59,466 - MainProcess - INFO - main - Shutting down application...
+2025-09-23 17:34:59,466 - MainProcess - INFO - main - Application stopped successfully
+INFO:     Application shutdown complete.
+INFO:     Finished server process [1158645]
+INFO:     Started server process [1160798]
+INFO:     Waiting for application startup.
+2025-09-23 17:35:03,688 - MainProcess - INFO - main - Starting application...
+2025-09-23 17:35:03,688 - MainProcess - INFO - main - Application started successfully
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8010 (Press CTRL+C to quit)
