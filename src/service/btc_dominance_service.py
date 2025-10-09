@@ -1,6 +1,6 @@
 import asyncio
 from datetime import datetime, timedelta
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 import logging
 from src.config.logger_config import logger
 from src.config.mongo_config import MongoDBConfig, get_db_and_collections_btcdominance
@@ -28,6 +28,16 @@ class BTCDominanceService:
     ) -> BTCDominanceResponse:
         """Get BTC dominance data - historical or latest records"""
         days = request.days
+        from_date = request.from_date
+        to_date = request.to_date
+
+        # Nếu có from_date và to_date, sử dụng date range query
+        if from_date and to_date:
+            return await self._get_data_by_date_range(from_date, to_date, days)
+
+        # Nếu chỉ có days hoặc không có gì cả
+        if days is None:
+            days = 1  # Default value
 
         if days == 0:
             # day=0 means realtime (latest records)
@@ -292,6 +302,90 @@ class BTCDominanceService:
             data.append(btc_dominance.model_dump())
 
         return BTCDominanceResponse(data=data)
+
+    async def _get_data_by_date_range(
+        self, from_date: str, to_date: str, days: Optional[int] = None
+    ) -> BTCDominanceResponse:
+        """Get BTC dominance data by date range"""
+        from datetime import datetime, timedelta
+
+        try:
+            # Parse dates from DDMMYYYY format
+            from_dt = datetime.strptime(from_date, "%d%m%Y")
+            to_dt = datetime.strptime(to_date, "%d%m%Y")
+
+            # Nếu có days, tính toán lại from_date dựa trên to_date
+            if days is not None:
+                calculated_from = to_dt - timedelta(days=days)
+                # Sử dụng ngày muộn hơn giữa from_dt và calculated_from
+                from_dt = max(from_dt, calculated_from)
+
+            # Set thời gian bắt đầu và kết thúc cho ngày
+            start_date = from_dt.replace(hour=0, minute=0, second=0, microsecond=0)
+            end_date = to_dt.replace(hour=23, minute=59, second=59, microsecond=999999)
+
+            logger.info(f"BTC date range query: {start_date} to {end_date}")
+
+            if not self._db_name or not self._history_col:
+                logger.error("Database or collection name not configured")
+                return BTCDominanceResponse(data=[])
+
+            db = self._client[self._db_name]
+            col = db[self._history_col]
+
+            # Query by date range
+            loop = asyncio.get_running_loop()
+
+            def _query():
+                try:
+                    # Try datetime field first
+                    cursor = col.find(
+                        {"datetime": {"$gte": start_date, "$lte": end_date}}
+                    ).sort("datetime", -1)
+
+                    results = list(cursor)
+                    if results:
+                        return results
+
+                    # Try timestamp_ms if datetime fails
+                    start_ms = int(start_date.timestamp() * 1000)
+                    end_ms = int(end_date.timestamp() * 1000)
+
+                    cursor = col.find(
+                        {"timestamp_ms": {"$gte": start_ms, "$lte": end_ms}}
+                    ).sort("timestamp_ms", -1)
+
+                    return list(cursor)
+
+                except Exception as e:
+                    logger.error(f"BTC date range query error: {str(e)}")
+                    return []
+
+            raw_data = await loop.run_in_executor(None, _query)
+            logger.info(f"Found {len(raw_data)} BTC records in date range")
+
+            # Convert to response format
+            data = []
+            for doc in raw_data:
+                try:
+                    if "_id" in doc:
+                        doc["_id"] = str(doc["_id"])
+
+                    # Convert datetime to string format if needed
+                    if "datetime" in doc and isinstance(doc["datetime"], datetime):
+                        doc["datetime"] = doc["datetime"].strftime("%Y-%m-%d")
+
+                    btc_dominance = BTCDominanceModel(**doc)
+                    data.append(btc_dominance.model_dump())
+                except Exception as e:
+                    logger.warning(f"Error parsing BTC item in date range: {str(e)}")
+                    continue
+
+            return BTCDominanceResponse(data=data)
+
+        except Exception as e:
+            logger.error(f"Error in BTC date range query: {str(e)}")
+            return BTCDominanceResponse(data=[])
 
     async def _get_latest_records(self) -> BTCDominanceResponse:
         """Get latest records for realtime data (day=0)"""

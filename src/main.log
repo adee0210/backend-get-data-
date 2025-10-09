@@ -2926,3 +2926,32 @@
 2025-10-09 16:40:52,126 - MainProcess - INFO - main - Application stopped successfully
 2025-10-09 16:40:56,329 - MainProcess - INFO - main - Starting application...
 2025-10-09 16:40:56,329 - MainProcess - INFO - main - Application started successfully
+2025-10-09 16:41:17,916 - MainProcess - INFO - main - Getting gold data for 0 days
+2025-10-09 16:41:17,917 - MainProcess - INFO - main - Getting latest gold records
+2025-10-09 16:41:17,926 - MainProcess - INFO - main - Found 1 latest gold records
+2025-10-09 16:41:30,300 - MainProcess - INFO - main - Getting gold data for 1 days
+2025-10-09 16:41:30,301 - MainProcess - INFO - main - Gold date range: 2025-10-08 16:41:30 to 2025-10-09 16:41:30
+2025-10-09 16:41:30,301 - MainProcess - INFO - main - Gold Strategy 1: Querying by datetime range 2025-10-08 16:41:30.300991 to 2025-10-09 16:41:30.300991
+2025-10-09 16:41:30,306 - MainProcess - INFO - main - Gold Strategy 1: Found 1326 records
+2025-10-09 16:41:30,306 - MainProcess - INFO - main - Found 1326 gold records
+2025-10-09 16:41:30,312 - MainProcess - INFO - main - Successfully processed 1326 gold records
+2025-10-09 17:10:56,381 - MainProcess - INFO - main - Getting ETF candlestick data for 1 days, symbol: FUEVN100
+2025-10-09 17:10:56,381 - MainProcess - INFO - main - ETF Date range for FUEVN100: 2025-10-08 to 2025-10-09
+2025-10-09 17:10:56,382 - MainProcess - INFO - main - ETF Strategy 1 for symbol FUEVN100: {'symbol': 'FUEVN100', 'datetime': {'$gte': '2025-10-08', '$lte': '2025-10-09'}}
+2025-10-09 17:10:56,385 - MainProcess - INFO - main - ETF Strategy 1 found 2 records for FUEVN100
+2025-10-09 17:10:56,385 - MainProcess - INFO - main - Found 2 ETF records for FUEVN100
+2025-10-09 17:10:56,386 - MainProcess - INFO - main - Successfully processed 2 ETF records
+2025-10-09 17:11:00,633 - MainProcess - INFO - main - Getting ETF candlestick data for 1 days, symbol: FUEVN100
+2025-10-09 17:11:00,633 - MainProcess - INFO - main - ETF Date range for FUEVN100: 2025-10-08 to 2025-10-09
+2025-10-09 17:11:00,633 - MainProcess - INFO - main - ETF Strategy 1 for symbol FUEVN100: {'symbol': 'FUEVN100', 'datetime': {'$gte': '2025-10-08', '$lte': '2025-10-09'}}
+2025-10-09 17:11:00,634 - MainProcess - INFO - main - ETF Strategy 1 found 2 records for FUEVN100
+2025-10-09 17:11:00,634 - MainProcess - INFO - main - Found 2 ETF records for FUEVN100
+2025-10-09 17:11:00,634 - MainProcess - INFO - main - Successfully processed 2 ETF records
+2025-10-09 17:20:05,543 - MainProcess - INFO - main - Shutting down application...
+2025-10-09 17:20:05,543 - MainProcess - INFO - main - Application stopped successfully
+2025-10-09 17:20:09,749 - MainProcess - INFO - main - Starting application...
+2025-10-09 17:20:09,749 - MainProcess - INFO - main - Application started successfully
+2025-10-09 17:20:23,492 - MainProcess - INFO - main - Shutting down application...
+2025-10-09 17:20:23,492 - MainProcess - INFO - main - Application stopped successfully
+2025-10-09 17:25:00,767 - MainProcess - INFO - main - Starting application...
+2025-10-09 17:25:00,767 - MainProcess - INFO - main - Application started successfully
