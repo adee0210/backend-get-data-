@@ -20,9 +20,6 @@ class ETFCandlestickRequest(BaseModel):
 class ETFCandlestickResponse(BaseModel):
     """Response model for historical ETF candlestick data"""
     data: List[ETFCandlestickModel]
-    total_records: int
-    request_day: int
-    request_symbol: str
     
     class Config:
         from_attributes = True
@@ -45,9 +42,6 @@ class RealtimeETFCandlestickRequest(BaseModel):
 class RealtimeETFCandlestickResponse(BaseModel):
     """Response model for realtime ETF candlestick data"""
     data: List[RealtimeETFCandlestickModel]
-    total_records: int
-    request_day: int
-    request_symbol: str
     
     class Config:
         from_attributes = True

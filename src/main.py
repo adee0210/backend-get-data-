@@ -2,13 +2,14 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-from src.controller.v1.btc_dominance import btc_dominance_controller
-from src.controller.v1.etf_candlestick import etf_candlestick_controller
+from src.controller.v1.btc_dominance import router as btc_router
+from src.controller.v1.etf_candlestick import router as etf_router
+from src.controller.v1.gold_data import router as gold_router
 from src.controller.v1.funding_rate import (
     FundingRateController,
     RealtimeFundingRateController,
 )
-from src.controller.v1.monitoring import monitoring_controller
+from src.controller.v1.monitoring import router as monitoring_router
 from src.config.logger_config import logger
 import sys
 import os
@@ -40,10 +41,11 @@ app = FastAPI(
 
 # Include routers
 app.include_router(FundingRateController.router)
-app.include_router(btc_dominance_controller.router)
-app.include_router(etf_candlestick_controller.router)
+app.include_router(btc_router)
+app.include_router(etf_router)
+app.include_router(gold_router)
 app.include_router(RealtimeFundingRateController.router)
-app.include_router(monitoring_controller.router)
+app.include_router(monitoring_router)
 
 
 @app.get("/")
@@ -59,8 +61,8 @@ async def health_check():
         "status": "healthy",
         "timestamp": "2025-09-18T00:00:00Z",
         "services": {
-            "api": "running", 
-            "database": "connected", 
-            "monitoring": "available"
+            "api": "running",
+            "database": "connected",
+            "monitoring": "available",
         },
     }

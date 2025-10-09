@@ -25,10 +25,17 @@ DB_BTC_DOMINANCE = {
 
 # ETF Candlestick Configuration
 DB_ETF_CANDLESTICK = {
-    "database_name": "etf_candlestick_db", 
+    "database_name": "etf_candlestick_db",
     # Both historical and realtime data are stored in the same collection
     "collection_history_name": "etf_candlestick_historical",
     "collection_realtime_name": "etf_candlestick_historical",
+}
+
+# Gold Data Configuration
+DB_GOLD_DATA = {
+    "database_name": "gold_db",
+    "collection_history_name": "gold_minute_data",
+    "collection_realtime_name": "gold_minute_data",
 }
 
 # Telegram Bot Configuration

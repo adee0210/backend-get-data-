@@ -106,19 +106,13 @@ class ETFCandlestickService:
             logger.info(f"Successfully processed {len(data)} ETF records")
             
             return ETFCandlestickResponse(
-                data=data,
-                total_records=len(data),
-                request_day=request.day,
-                request_symbol=request.symbol
+                data=data
             )
             
         except Exception as e:
             logger.error(f"Error getting ETF candlestick data: {str(e)}")
             return ETFCandlestickResponse(
-                data=[],
-                total_records=0,
-                request_day=request.day,
-                request_symbol=request.symbol
+                data=[]
             )
 
     async def _get_latest_records(self, symbol: str) -> ETFCandlestickResponse:
@@ -128,8 +122,8 @@ class ETFCandlestickService:
         try:
             collection = self._get_collection()
             
-            # Get latest records for specific symbol sorted by datetime
-            cursor = collection.find({"symbol": symbol}).sort("datetime", -1).limit(10)
+            # Get latest record for specific symbol sorted by datetime
+            cursor = collection.find({"symbol": symbol}).sort("datetime", -1).limit(1)
             raw_data = list(cursor)
             
             logger.info(f"Found {len(raw_data)} latest ETF records for {symbol}")
@@ -149,19 +143,13 @@ class ETFCandlestickService:
                     continue
             
             return ETFCandlestickResponse(
-                data=data,
-                total_records=len(data),
-                request_day=0,  # 0 indicates realtime/latest
-                request_symbol=symbol
+                data=data
             )
             
         except Exception as e:
             logger.error(f"Error getting latest ETF records: {str(e)}")
             return ETFCandlestickResponse(
-                data=[],
-                total_records=0,
-                request_day=0,
-                request_symbol=symbol
+                data=[]
             )
 
 

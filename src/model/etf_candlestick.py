@@ -5,7 +5,6 @@ from datetime import datetime
 
 class ETFCandlestickModel(BaseModel):
     """Model for ETF candlestick data"""
-    timestamp_ms: Optional[int] = None
     symbol: str
     open: float
     high: float 
@@ -20,8 +19,6 @@ class ETFCandlestickModel(BaseModel):
 
 
 class RealtimeETFCandlestickModel(BaseModel):
-    """Model for realtime ETF candlestick data (latest records)"""
-    timestamp_ms: Optional[int] = None
     symbol: str
     open: float
     high: float

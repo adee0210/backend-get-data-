@@ -1,7 +1,12 @@
 from typing import List, Dict, Any
 from datetime import datetime, timedelta
-from src.config.mongo_config import MongoDBConfig,get_db_and_collections_funding_rate 
-from src.dto.funding_rate_dto import FundingRateRequest, FundingRateResponse, RealtimeFundingRateRequest, RealtimeFundingRateResponse
+from src.config.mongo_config import MongoDBConfig, get_db_and_collections_funding_rate
+from src.dto.funding_rate_dto import (
+    FundingRateRequest,
+    FundingRateResponse,
+    RealtimeFundingRateRequest,
+    RealtimeFundingRateResponse,
+)
 from src.model.funding_rate import RealtimeFundingRate
 import asyncio
 
@@ -9,7 +14,9 @@ import asyncio
 class FundingRateService:
     def __init__(self, db_client=None):
         self._client = db_client or MongoDBConfig().get_client()
-        self._db_name, self._realtime_col, self._history_col = get_db_and_collections_funding_rate()
+        self._db_name, self._realtime_col, self._history_col = (
+            get_db_and_collections_funding_rate()
+        )
 
     async def get_funding_rate_data(
         self, request: FundingRateRequest
@@ -32,6 +39,8 @@ class FundingRateService:
         loop = asyncio.get_running_loop()
 
         def _query():
+            if not self._db_name or not self._history_col:
+                return []
             db = self._client[self._db_name]
             coll = db[self._history_col]
 
@@ -51,21 +60,23 @@ class FundingRateService:
                 {
                     "$group": {
                         "_id": "$funding_date",
-                        "date_obj": {"$first": "$_funding_date_obj"}
+                        "date_obj": {"$first": "$_funding_date_obj"},
                     }
                 },
                 {"$sort": {"date_obj": -1}},
                 {"$limit": request.days},
-                {"$project": {"_id": 1}}
+                {"$project": {"_id": 1}},
             ]
 
             recent_dates = [doc["_id"] for doc in coll.aggregate(date_pipeline)]
 
             main_pipeline = [
-                {"$match": {
-                    "symbol": {"$in": symbols},
-                    "funding_date": {"$in": recent_dates}
-                }},
+                {
+                    "$match": {
+                        "symbol": {"$in": symbols},
+                        "funding_date": {"$in": recent_dates},
+                    }
+                },
                 {
                     "$addFields": {
                         "_funding_date_obj": {
@@ -108,20 +119,19 @@ class FundingRateService:
         loop = asyncio.get_running_loop()
 
         def _query():
+            if not self._db_name or not self._realtime_col:
+                return []
             db = self._client[self._db_name]
             coll = db[self._realtime_col]
 
             # Lấy tài liệu mới nhất cho mỗi symbol
             pipeline = [
                 {"$match": {"symbol": {"$in": symbols}}},
-                {"$sort": {"update_date": -1, "update_time": -1}},  # Sắp xếp theo ngày và giờ giảm dần
                 {
-                    "$group": {
-                        "_id": "$symbol",
-                        "doc": {"$first": "$$ROOT"}
-                    }
-                },
-                {"$replaceRoot": {"newRoot": "$doc"}}
+                    "$sort": {"update_date": -1, "update_time": -1}
+                },  # Sắp xếp theo ngày và giờ giảm dần
+                {"$group": {"_id": "$symbol", "doc": {"$first": "$$ROOT"}}},
+                {"$replaceRoot": {"newRoot": "$doc"}},
             ]
 
             docs = list(coll.aggregate(pipeline))
@@ -143,7 +153,7 @@ class FundingRateService:
                 interval=doc.get("interval"),
                 mark_price=doc.get("mark_price"),
                 update_date=doc.get("update_date"),
-                update_time=doc.get("update_time")
+                update_time=doc.get("update_time"),
             )
             data.append(realtime_rate)
 

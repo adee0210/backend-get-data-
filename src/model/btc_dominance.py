@@ -11,7 +11,7 @@ class BTCDominanceModel(BaseModel):
     low: Optional[float] = None
     close: Optional[float] = None
     volume: Optional[float] = None
-    datetime: Optional[dt.datetime] = None
+    datetime: Optional[str] = None  # Format: YYYY-MM-DD
 
     class Config:
         from_attributes = True
@@ -25,7 +25,7 @@ class RealtimeBTCDominanceModel(BaseModel):
     low: Optional[float] = None
     close: Optional[float] = None
     volume: Optional[float] = None
-    datetime: Optional[dt.datetime] = None
+    datetime: Optional[str] = None  # Format: YYYY-MM-DD
 
     class Config:
         from_attributes = True
