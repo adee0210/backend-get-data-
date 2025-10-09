@@ -2900,3 +2900,29 @@
 2025-10-09 16:33:13,436 - MainProcess - INFO - main - Getting gold data for 0 days
 2025-10-09 16:33:13,436 - MainProcess - INFO - main - Getting latest gold records
 2025-10-09 16:33:13,437 - MainProcess - INFO - main - Found 1 latest gold records
+2025-10-09 16:36:19,354 - MainProcess - INFO - main - Shutting down application...
+2025-10-09 16:36:19,355 - MainProcess - INFO - main - Application stopped successfully
+2025-10-09 16:36:23,611 - MainProcess - INFO - main - Starting application...
+2025-10-09 16:36:23,611 - MainProcess - INFO - main - Application started successfully
+2025-10-09 16:37:03,305 - MainProcess - INFO - main - Getting gold data for 1 days
+2025-10-09 16:37:03,305 - MainProcess - INFO - main - Gold date range: 2025-10-08 16:37:03 to 2025-10-09 16:37:03
+2025-10-09 16:37:03,305 - MainProcess - INFO - main - Gold Strategy 1: Querying by datetime range 2025-10-08 16:37:03.305530 to 2025-10-09 16:37:03.305530
+2025-10-09 16:37:03,321 - MainProcess - INFO - main - Gold Strategy 1: Found 1325 records
+2025-10-09 16:37:03,321 - MainProcess - INFO - main - Found 1325 gold records
+2025-10-09 16:37:03,327 - MainProcess - INFO - main - Successfully processed 1325 gold records
+2025-10-09 16:37:23,823 - MainProcess - INFO - main - Getting gold data for 7 days
+2025-10-09 16:37:23,823 - MainProcess - INFO - main - Gold date range: 2025-10-02 16:37:23 to 2025-10-09 16:37:23
+2025-10-09 16:37:23,823 - MainProcess - INFO - main - Gold Strategy 1: Querying by datetime range 2025-10-02 16:37:23.823319 to 2025-10-09 16:37:23.823319
+2025-10-09 16:37:23,838 - MainProcess - INFO - main - Gold Strategy 1: Found 6827 records
+2025-10-09 16:37:23,838 - MainProcess - INFO - main - Found 6827 gold records
+2025-10-09 16:37:23,868 - MainProcess - INFO - main - Successfully processed 6827 gold records
+2025-10-09 16:37:47,218 - MainProcess - INFO - main - Getting gold data for 20 days
+2025-10-09 16:37:47,218 - MainProcess - INFO - main - Gold date range: 2025-09-19 16:37:47 to 2025-10-09 16:37:47
+2025-10-09 16:37:47,218 - MainProcess - INFO - main - Gold Strategy 1: Querying by datetime range 2025-09-19 16:37:47.218569 to 2025-10-09 16:37:47.218569
+2025-10-09 16:37:47,276 - MainProcess - INFO - main - Gold Strategy 1: Found 19205 records
+2025-10-09 16:37:47,276 - MainProcess - INFO - main - Found 19205 gold records
+2025-10-09 16:37:47,358 - MainProcess - INFO - main - Successfully processed 19205 gold records
+2025-10-09 16:40:52,125 - MainProcess - INFO - main - Shutting down application...
+2025-10-09 16:40:52,126 - MainProcess - INFO - main - Application stopped successfully
+2025-10-09 16:40:56,329 - MainProcess - INFO - main - Starting application...
+2025-10-09 16:40:56,329 - MainProcess - INFO - main - Application started successfully

@@ -105,9 +105,11 @@ class GoldDataService:
                     if "_id" in item:
                         item["_id"] = str(item["_id"])
 
-                    # Convert datetime to string format
+                    # Convert datetime to string format with minutes
                     if "datetime" in item and isinstance(item["datetime"], datetime):
-                        item["datetime"] = item["datetime"].strftime("%Y-%m-%d")
+                        item["datetime"] = item["datetime"].strftime(
+                            "%Y-%m-%d %H:%M:%S"
+                        )
 
                     gold_model = GoldDataModel(**item)
                     data.append(gold_model)
@@ -144,9 +146,11 @@ class GoldDataService:
                     if "_id" in item:
                         item["_id"] = str(item["_id"])
 
-                    # Convert datetime to string format
+                    # Convert datetime to string format with minutes
                     if "datetime" in item and isinstance(item["datetime"], datetime):
-                        item["datetime"] = item["datetime"].strftime("%Y-%m-%d")
+                        item["datetime"] = item["datetime"].strftime(
+                            "%Y-%m-%d %H:%M:%S"
+                        )
 
                     gold_model = GoldDataModel(**item)
                     data.append(gold_model)
